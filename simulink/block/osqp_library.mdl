@@ -1,7 +1,7 @@
 Library {
-  Name			  "osqp_library"
+  Name			  "osqp_library_old"
   Version		  8.6
-  SavedCharacterEncoding  "ISO-8859-1"
+  SavedCharacterEncoding  "UTF-8"
   LibraryType		  "BlockLibrary"
   ScopeRefreshTime	  0.035000
   OverrideScopeRefreshTime on
@@ -17,7 +17,7 @@ Library {
       $ObjectID		      2
       $ClassName	      "Simulink.WindowInfo"
       IsActive		      [1]
-      Location		      [1006.0, 23.0, 674.0, 512.0]
+      Location		      [1978.0, 132.0, 674.0, 512.0]
       Object {
 	$PropName		"ModelBrowserInfo"
 	$ObjectID		3
@@ -34,28 +34,16 @@ Library {
 	$ClassName		"Simulink.ExplorerBarInfo"
 	Visible			[1]
       }
-      Array {
-	Type			"Simulink.EditorInfo"
-	Dimension		2
-	Object {
-	  $ObjectID		  5
-	  IsActive		  [1]
-	  ViewObjType		  "SimulinkTopLevel"
-	  LoadSaveID		  "0"
-	  Extents		  [636.0, 347.0]
-	  ZoomFactor		  [1.0]
-	  Offset		  [-228.0, -30.5]
-	}
-	Object {
-	  $ObjectID		  6
-	  IsActive		  [0]
-	  ViewObjType		  "SimulinkSubsys"
-	  LoadSaveID		  "17"
-	  Extents		  [636.0, 347.0]
-	  ZoomFactor		  [1.0]
-	  Offset		  [0.0, 0.0]
-	}
-	PropName		"EditorsInfo"
+      Object {
+	$PropName		"EditorsInfo"
+	$ObjectID		5
+	$ClassName		"Simulink.EditorInfo"
+	IsActive		[1]
+	ViewObjType		"SimulinkTopLevel"
+	LoadSaveID		"0"
+	Extents			[622.0, 343.0]
+	ZoomFactor		[1.0]
+	Offset			[-228.0, -30.5]
       }
     }
   }
@@ -63,11 +51,11 @@ Library {
   Creator		  "pgoulart"
   UpdateHistory		  "UpdateHistoryNever"
   ModifiedByFormat	  "%<Auto>"
-  LastModifiedBy	  "pgoulart"
+  LastModifiedBy	  "im1716"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Thu Mar 28 21:02:25 2019"
-  RTWModifiedTimeStamp	  475707745
-  ModelVersionFormat	  "1.%<AutoIncrement:5>"
+  LastModifiedDate	  "Mon Apr 15 19:28:28 2019"
+  RTWModifiedTimeStamp	  477257307
+  ModelVersionFormat	  "1.%<AutoIncrement:17>"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
   LibraryLinkDisplay	  "disabled"
@@ -129,14 +117,15 @@ Library {
     Type		    "Handle"
     Dimension		    1
     Simulink.ConfigSet {
-      $ObjectID		      8
+      $ObjectID		      7
       Version		      "1.15.1"
       Array {
 	Type			"Handle"
 	Dimension		9
 	Simulink.SolverCC {
-	  $ObjectID		  9
+	  $ObjectID		  8
 	  Version		  "1.15.1"
+	  Components		  []
 	  StartTime		  "0.0"
 	  StopTime		  "10.0"
 	  AbsTol		  "auto"
@@ -171,8 +160,9 @@ Library {
 	  InsertRTBMode		  "Whenever possible"
 	}
 	Simulink.DataIOCC {
-	  $ObjectID		  10
+	  $ObjectID		  9
 	  Version		  "1.15.1"
+	  Components		  []
 	  Decimation		  "1"
 	  ExternalInput		  "[t, u]"
 	  FinalStateName	  "xFinal"
@@ -207,7 +197,7 @@ Library {
 	  LoggingIntervals	  "[-inf, inf]"
 	}
 	Simulink.OptimizationCC {
-	  $ObjectID		  11
+	  $ObjectID		  10
 	  Version		  "1.15.1"
 	  Array {
 	    Type		    "Cell"
@@ -222,6 +212,7 @@ Library {
 	    Cell		    "UseSpecifiedMinMax"
 	    PropName		    "DisabledProps"
 	  }
+	  Components		  []
 	  BlockReduction	  on
 	  BooleanDataType	  on
 	  ConditionallyExecuteInputs on
@@ -264,8 +255,9 @@ Library {
 	  AccelVerboseBuild	  off
 	}
 	Simulink.DebuggingCC {
-	  $ObjectID		  12
+	  $ObjectID		  11
 	  Version		  "1.15.1"
+	  Components		  []
 	  RTPrefix		  "error"
 	  ConsistencyChecking	  "none"
 	  ArrayBoundsChecking	  "none"
@@ -354,8 +346,9 @@ Library {
 	  IntegerSaturationMsg	  "warning"
 	}
 	Simulink.HardwareCC {
-	  $ObjectID		  13
+	  $ObjectID		  12
 	  Version		  "1.15.1"
+	  Components		  []
 	  ProdBitPerChar	  8
 	  ProdBitPerShort	  16
 	  ProdBitPerInt		  32
@@ -394,8 +387,9 @@ Library {
 	  ProdEqTarget		  on
 	}
 	Simulink.ModelReferenceCC {
-	  $ObjectID		  14
+	  $ObjectID		  13
 	  Version		  "1.15.1"
+	  Components		  []
 	  UpdateModelReferenceTargets "IfOutOfDateOrStructuralChange"
 	  EnableRefExpFcnMdlSchedulingChecks on
 	  CheckModelReferenceTargetMessage "error"
@@ -410,8 +404,9 @@ Library {
 	  SupportModelReferenceSimTargetCustomCode off
 	}
 	Simulink.SFSimCC {
-	  $ObjectID		  15
+	  $ObjectID		  14
 	  Version		  "1.15.1"
+	  Components		  []
 	  SFSimEcho		  on
 	  SimCtrlC		  on
 	  SimIntegrity		  on
@@ -422,7 +417,7 @@ Library {
 	}
 	Simulink.RTWCC {
 	  $BackupClass		  "Simulink.RTWCC"
-	  $ObjectID		  16
+	  $ObjectID		  15
 	  Version		  "1.15.1"
 	  Array {
 	    Type		    "Cell"
@@ -452,7 +447,7 @@ Library {
 	  GenerateMakefile	  on
 	  PackageGeneratedCodeAndArtifacts off
 	  TemplateMakefile	  "grt_default_tmf"
-	  PostCodeGenCommand	  ""
+	  PostCodeGenCommand	  " setOsqpBuildInfo(buildInfo);"
 	  GenerateReport	  off
 	  RTWVerbose		  on
 	  RetainRTWFile		  off
@@ -492,7 +487,7 @@ Library {
 	    Type		    "Handle"
 	    Dimension		    2
 	    Simulink.CodeAppCC {
-	      $ObjectID		      17
+	      $ObjectID		      16
 	      Version		      "1.15.1"
 	      Array {
 		Type			"Cell"
@@ -527,6 +522,7 @@ Library {
 		Cell			"ReqsInCode"
 		PropName		"DisabledProps"
 	      }
+	      Components	      []
 	      ForceParamTrailComments off
 	      GenerateComments	      on
 	      CommentStyle	      "Auto"
@@ -565,7 +561,7 @@ Library {
 	    }
 	    Simulink.GRTTargetCC {
 	      $BackupClass	      "Simulink.TargetCC"
-	      $ObjectID		      18
+	      $ObjectID		      17
 	      Version		      "1.15.1"
 	      Array {
 		Type			"Cell"
@@ -588,6 +584,7 @@ Library {
 		Cell			"PreserveStateflowLocalDataDimensions"
 		PropName		"DisabledProps"
 	      }
+	      Components	      []
 	      TargetFcnLib	      "ansi_tfl_table_tmw.mat"
 	      TargetLibSuffix	      ""
 	      TargetPreCompLibLocation ""
@@ -652,9 +649,10 @@ Library {
 	  }
 	}
 	SlCovCC.ConfigComp {
-	  $ObjectID		  19
+	  $ObjectID		  18
 	  Version		  "1.15.1"
 	  Description		  "Simulink Coverage Configuration Component"
+	  Components		  []
 	  Name			  "Simulink Coverage"
 	  RecordCoverage	  off
 	  CovPath		  "/"
@@ -834,8 +832,8 @@ Library {
     }
   }
   System {
-    Name		    "osqp_library"
-    Location		    [1006, 23, 1680, 535]
+    Name		    "osqp_library_old"
+    Location		    [1978, 132, 2652, 644]
     Open		    off
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -859,19 +857,23 @@ Library {
       ZOrder		      8
       DropShadow	      on
       FontSize		      12
+      TreatAsAtomicUnit	      on
+      RTWSystemCode	      "Nonreusable function"
       RequestExecContextInheritance off
       ContentPreviewEnabled   on
       Object {
 	$PropName		"MaskObject"
-	$ObjectID		20
+	$ObjectID		19
 	$ClassName		"Simulink.Mask"
+	Type			"OSQP"
+	Description		"This block implements an OSQP solver object."
 	Initialization		"osqp_block_init(gcb)\n\n"
 	SelfModifiable		"on"
 	Array {
 	  Type			  "Simulink.MaskParameter"
 	  Dimension		  10
 	  Object {
-	    $ObjectID		    21
+	    $ObjectID		    20
 	    Type		    "edit"
 	    Name		    "P"
 	    Prompt		    "P"
@@ -879,42 +881,42 @@ Library {
 	    Tunable		    "off"
 	  }
 	  Object {
-	    $ObjectID		    22
+	    $ObjectID		    21
 	    Type		    "edit"
 	    Name		    "A"
 	    Prompt		    "A"
 	    Value		    "A"
 	  }
 	  Object {
-	    $ObjectID		    23
+	    $ObjectID		    22
 	    Type		    "edit"
 	    Name		    "q"
 	    Prompt		    "q"
 	    Value		    "q"
 	  }
 	  Object {
-	    $ObjectID		    24
+	    $ObjectID		    23
 	    Type		    "edit"
 	    Name		    "l"
 	    Prompt		    "l"
 	    Value		    "l"
 	  }
 	  Object {
-	    $ObjectID		    25
+	    $ObjectID		    24
 	    Type		    "edit"
 	    Name		    "u"
 	    Prompt		    "u"
 	    Value		    "u"
 	  }
 	  Object {
-	    $ObjectID		    26
+	    $ObjectID		    25
 	    Type		    "edit"
 	    Name		    "opts"
 	    Prompt		    "OSQP Settings"
 	    Value		    "{'verbose',true}"
 	  }
 	  Object {
-	    $ObjectID		    27
+	    $ObjectID		    26
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
@@ -929,7 +931,7 @@ Library {
 	    Value		    "Never"
 	  }
 	  Object {
-	    $ObjectID		    28
+	    $ObjectID		    27
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
@@ -944,14 +946,14 @@ Library {
 	    Value		    "Always"
 	  }
 	  Object {
-	    $ObjectID		    29
+	    $ObjectID		    28
 	    Type		    "checkbox"
 	    Name		    "has_external_q_input"
 	    Prompt		    "External linear cost (q)"
 	    Value		    "on"
 	  }
 	  Object {
-	    $ObjectID		    30
+	    $ObjectID		    29
 	    Type		    "checkbox"
 	    Name		    "has_external_bound_input"
 	    Prompt		    "External bounds (l,u)"
@@ -963,11 +965,11 @@ Library {
 	  Type			  "Simulink.dialog.Group"
 	  Dimension		  3
 	  Object {
-	    $ObjectID		    31
+	    $ObjectID		    30
 	    Prompt		    "%<MaskType>"
 	    Object {
 	      $PropName		      "DialogControls"
-	      $ObjectID		      32
+	      $ObjectID		      31
 	      $ClassName	      "Simulink.dialog.Text"
 	      Prompt		      "%<MaskDescription>"
 	      Name		      "DescTextVar"
@@ -975,37 +977,37 @@ Library {
 	    Name		    "DescGroupVar"
 	  }
 	  Object {
-	    $ObjectID		    33
+	    $ObjectID		    32
 	    Prompt		    "OSQP Solver Data"
 	    Array {
 	      Type		      "Simulink.dialog.parameter.Edit"
 	      Dimension		      6
 	      Object {
-		$ObjectID		34
+		$ObjectID		33
 		Name			"P"
 	      }
 	      Object {
-		$ObjectID		35
+		$ObjectID		34
 		Row			"current"
 		Name			"A"
 	      }
 	      Object {
-		$ObjectID		36
+		$ObjectID		35
 		Row			"current"
 		Name			"q"
 	      }
 	      Object {
-		$ObjectID		37
+		$ObjectID		36
 		Row			"current"
 		Name			"l"
 	      }
 	      Object {
-		$ObjectID		38
+		$ObjectID		37
 		Row			"current"
 		Name			"u"
 	      }
 	      Object {
-		$ObjectID		39
+		$ObjectID		38
 		Name			"opts"
 	      }
 	      PropName		      "DialogControls"
@@ -1013,29 +1015,29 @@ Library {
 	    Name		    "ParameterGroupVar"
 	  }
 	  Object {
-	    $ObjectID		    40
+	    $ObjectID		    39
 	    Array {
 	      Type		      "Simulink.dialog.parameter.Control"
 	      Dimension		      4
 	      Object {
-		$ObjectID		41
+		$ObjectID		40
 		$ClassName		"Simulink.dialog.parameter.Popup"
 		PromptLocation		"top"
 		Name			"refactor_style"
 	      }
 	      Object {
-		$ObjectID		42
+		$ObjectID		41
 		$ClassName		"Simulink.dialog.parameter.Popup"
 		PromptLocation		"top"
 		Name			"warmstart_style"
 	      }
 	      Object {
-		$ObjectID		43
+		$ObjectID		42
 		$ClassName		"Simulink.dialog.parameter.CheckBox"
 		Name			"has_external_q_input"
 	      }
 	      Object {
-		$ObjectID		44
+		$ObjectID		43
 		$ClassName		"Simulink.dialog.parameter.CheckBox"
 		Name			"has_external_bound_input"
 	      }
@@ -1553,13 +1555,13 @@ Library {
       RequestExecContextInheritance off
       Object {
 	$PropName		"MaskObject"
-	$ObjectID		45
+	$ObjectID		44
 	$ClassName		"Simulink.Mask"
 	Display			"disp('MPC Example\\n(Quadcopter)')"
       }
       System {
 	Name			"Subsystem"
-	Location		[1258, 23, 1932, 535]
+	Location		[1978, 132, 2652, 644]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200

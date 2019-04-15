@@ -94,7 +94,8 @@ TAGS
 out/
 *.asv
 *.slxc
-simulink/slprj/
+simulink/examples/slprj/
+simulink/examples/*_rtw
 
 # Files generated during tests
 code/
