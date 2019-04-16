@@ -59,9 +59,9 @@ function osqp_makeBuildInfoTLC( osqpDir, buildDir )
     srcName = fullfile(osqpIncPath, incFiles(i).name);
     dstName = fullfile(buildDir,    incFiles(i).name);
 
-		% Escape the strings
-		srcName = regexprep(srcName, '([\\])', '\\$1');
-		dstName = regexprep(dstName, '([\\])', '\\$1');
+    % Escape the strings
+    srcName = regexprep(srcName, '([\\])', '\\$1');
+    dstName = regexprep(dstName, '([\\])', '\\$1');
 
     fprintf(tlcFile, '%%assign temp = FEVAL( "copyfile", "%s", "%s" )\n', srcName, dstName);
   end
