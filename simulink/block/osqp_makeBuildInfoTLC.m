@@ -1,5 +1,5 @@
-function makeOsqpBuildInfoTLC( osqpDir, buildDir )
-%MAKEOSQPBUILDINFOTLC Make a TLC file to add all the OSQP sources to the build
+function osqp_makeBuildInfoTLC( osqpDir, buildDir )
+%OSQP_MAKEBUILDINFOTLC Make a TLC file to add all the OSQP sources to the build
 %
 % This function will generate a Target Language Compiler file that will
 % automatically add the C source code and include paths for OSQP to the
@@ -11,6 +11,7 @@ function makeOsqpBuildInfoTLC( osqpDir, buildDir )
   osqpIncPath = fullfile(osqpDir, 'include');
   osqpSrcPath = fullfile(osqpDir, 'src', 'osqp');
 
+
   %% Create the TLC
   tlcFname = fullfile(osqpDir, 'osqp_build.tlc');
   tlcFile = fopen(tlcFname, 'w');
@@ -19,7 +20,6 @@ function makeOsqpBuildInfoTLC( osqpDir, buildDir )
   fprintf(tlcFile, '%%%% This file will modify the build system to include the OSQP source files and\n');
   fprintf(tlcFile, '%%%% copy the header files onto the include path.\n\n');
 
-  %% Add the include path
 
   %% Add the source files to the build spec
   srcFiles = dir(osqpSrcPath);
@@ -40,9 +40,11 @@ function makeOsqpBuildInfoTLC( osqpDir, buildDir )
     % Write the actual file
     [~, srcName, ~] = fileparts(srcFiles(i).name);
     srcName = fullfile(osqpSrcPath, srcName);
+    srcName = regexprep(srcName, '([\\])', '\\$1');
     fprintf(tlcFile, '%%<LibAddToModelSources("%s")>\n', srcName);
   end
   fprintf(tlcFile, '\n');
+
 
   %% Add the copy of the include files to the build directory to the build spec
   incFiles = dir(osqpIncPath);
@@ -56,6 +58,11 @@ function makeOsqpBuildInfoTLC( osqpDir, buildDir )
     % Copy the file
     srcName = fullfile(osqpIncPath, incFiles(i).name);
     dstName = fullfile(buildDir,    incFiles(i).name);
+
+		% Escape the strings
+		srcName = regexprep(srcName, '([\\])', '\\$1');
+		dstName = regexprep(dstName, '([\\])', '\\$1');
+
     fprintf(tlcFile, '%%assign temp = FEVAL( "copyfile", "%s", "%s" )\n', srcName, dstName);
   end
 

@@ -381,7 +381,7 @@ function WriteRTW(block)
   block.WriteRTWParam('string', 'osqp_workspaceFile', fullfile(osqpDir, 'src', 'osqp', workspaceName) );
 
   % Make the TLC that tells the compiler where to find all the files
-  makeOsqpBuildInfoTLC( osqpDir, buildDir );
+  osqp_makeBuildInfoTLC( osqpDir, buildDir );
   buildInfoTLC = fullfile(osqpDir, 'osqp_build.tlc');
   block.WriteRTWParam('string', 'osqp_buildInfoTLC', buildInfoTLC);
 

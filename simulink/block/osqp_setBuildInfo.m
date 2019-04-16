@@ -1,5 +1,5 @@
-function setOsqpBuildInfo( buildInfo )
-%SETOSQPBUILDINFO Add the generated OSQP sources and includes to the RTW build process
+function osqp_setBuildInfo( buildInfo )
+%OSQP_SETBUILDINFO Add the generated OSQP sources and includes to the RTW build process
 %
 % This function will add the OSQP generated source files and includes to the
 % Matlab build path.
