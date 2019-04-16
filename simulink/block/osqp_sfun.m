@@ -340,9 +340,24 @@ function WriteRTW(block)
     error('All inputs and outputs must be the same data type');
   end
 
+  % Determine if nonfinite numbers are supported
+  nonfinite = get_param('quadcopter_example', 'SupportNonFinite');
+  switch (nonfinite)
+  case 'on'
+    block.WriteRTWParam('matrix', 'nonfinite', 1);
+    disp('  Enabling OSQP support for nonfinite MATLAB numbers')
+  case 'off'
+    block.WriteRTWParam('matrix', 'nonfinite', 0);
+    disp('  Disabling OSQP support for nonfinite MATLAB numbers')
+  otherwise
+    error('Unable to determine if nonfinite numbers are supported');
+  end
+
 
   %% Create the OSQP code
   %----------------------------------------------------------------
+
+  workspaceName = 'workspace';
 
   % Get the directory where the build is happening
   buildDir = RTW.getBuildDir(bdroot).BuildDirectory;
@@ -360,6 +375,16 @@ function WriteRTW(block)
 
   % Tell the TLC where the code is and what the osqp workspace is called
   block.WriteRTWParam('string', 'osqp_code_dir', osqpDir);
-  block.WriteRTWParam('string', 'osqp_workspace', 'workspace');
+  block.WriteRTWParam('string', 'osqp_src_dir', fullfile(osqpDir, 'src', 'osqp') );
+  block.WriteRTWParam('string', 'osqp_inc_dir', fullfile(osqpDir, 'include') );
+  block.WriteRTWParam('string', 'osqp_workspace', workspaceName);
+  block.WriteRTWParam('string', 'osqp_workspaceFile', fullfile(osqpDir, 'src', 'osqp', workspaceName) );
+
+  % Make the TLC that tells the compiler where to find all the files
+  makeOsqpBuildInfoTLC( osqpDir, buildDir );
+  buildInfoTLC = fullfile(osqpDir, 'osqp_build.tlc');
+  block.WriteRTWParam('string', 'osqp_buildInfoTLC', buildInfoTLC);
+
+
 
 %endfunction

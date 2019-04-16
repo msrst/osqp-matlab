@@ -10,6 +10,9 @@
 %% This function is called once for the entire model
 %function BlockTypeSetup(block, system) void
 
+	%assign nonfinite = %<ParamSettings.nonfinite>[0]
+	
+
   %% Create a header file that contains inline functions prototype to handle the
   %% nonfinite checking and conversion
   %assign srcFileName = "osqp_nonfinite"
@@ -22,6 +25,11 @@
 
 		  #include "osqp.h"
 		  #include <rtwtypes.h>
+
+			%% Define if non-finite numbers are supported
+			%if nonfinite == 1
+				#define OSQP_NONFINITE
+			%endif
 
 		#ifdef OSQP_NONFINITE
 			#include <rt_nonfinite.h>
@@ -85,6 +93,11 @@
 	%% Add the main osqp header and the generated one to the project
   %<LibAddToCommonIncludes("osqp.h")>
   %<LibAddToCommonIncludes("%<srcFileName>.h")>
+
+  %% Call the TLC that will setup the compiler paths & sources
+  %if FILE_EXISTS("%<ParamSettings.osqp_buildInfoTLC>")
+  	%include "%<ParamSettings.osqp_buildInfoTLC>"
+  %endif
 %endfunction
 
 
@@ -92,9 +105,11 @@
 %%
 %% This function is called once per block in the model
 %function BlockInstanceSetup(block, system) void
-%% Add the data workspace header to the file
-%assign incname = "%<ParamSettings.osqp_workspace>.h"
-%<LibAddToCommonIncludes("%<incname>")>
+%% Add the data workspace header & source file to the build system
+%assign workspace = "%<ParamSettings.osqp_workspace>"
+%assign workspaceFile = "%<ParamSettings.osqp_workspaceFile>"
+%<LibAddToCommonIncludes("%<workspace>.h")>
+%<LibAddToModelSources("%<workspaceFile>")>
 %endfunction
 
 
