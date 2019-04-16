@@ -24,16 +24,12 @@
 		  #define _%<hFileNameMacro>_H_
 
 		  #include "osqp.h"
-		  #include <rtwtypes.h>
 
-			%% Define if non-finite numbers are supported
+			%% Include this if non-finite numbers are supported
 			%if nonfinite == 1
-				#define OSQP_NONFINITE
+				#include <rt_nonfinite.h>
 			%endif
 
-		#ifdef OSQP_NONFINITE
-			#include <rt_nonfinite.h>
-		#endif // OSQP_NONFINITE
 
 		#ifdef __cplusplus
 			extern "C" {
@@ -41,46 +37,46 @@
 
 		  static inline c_float nonfinite_toOSQP( c_float val ) {
 		  	c_float retval = val;
-		#ifdef OSQP_NONFINITE
-				if ( rtIsNaN(val) ) {
+		%if nonfinite == 1
+				if ( val == %<LibRealNonFinite("nan")> ) {
 					retval = OSQP_NAN;
-				} else if ( val == rtMinusInf ) {
+				} else if ( val == %<LibRealNonFinite("-inf")> ) {
 					retval = -OSQP_INFTY;
-				} else if ( val == rtInf ) {
+				} else if ( val == %<LibRealNonFinite("inf")> ) {
 					retval = OSQP_INFTY;
 				}
-		#endif // OSQP_NONFINITE
+		%endif
 			return( retval );
 		  }
 
 		  static inline real_T nonfinite_fromOSQP( c_float val ) {
 		  	c_float retval = (real_T) val;
-		#ifdef OSQP_NONFINITE
+		%if nonfinite == 1
 				if ( val == OSQP_NAN ) {
-					retval = rtNaN;
+					retval = %<LibRealNonFinite("nan")>;
 				} else if ( val < -OSQP_INFTY ) {
-					retval = rtMinusInf;
+					retval = %<LibRealNonFinite("-inf")>;
 				} else if ( val > OSQP_INFTY ) {
-					retval = rtInf;
+					retval = %<LibRealNonFinite("inf")>;
 				}
-		#endif // OSQP_NONFINITE
+		%endif
 			return( retval );
 		  }
 
 		  static inline real_T nonfinite_NaNOSQP( ) {
-		#ifdef OSQP_NONFINITE
-					return( rtNaN );
-		#else
+		%if nonfinite == 1
+					return( %<LibRealNonFinite("nan")> );
+		%else
 					return( OSQP_INFTY );
-		#endif // OSQP_NONFINITE
+		%endif
 		  }
 
 		  static inline real_T nonfinite_infOSQP( ) {
-		#ifdef OSQP_NONFINITE
-					return( rtInf );
-		#else
+		%if nonfinite == 1
+					return( %<LibRealNonFinite("inf")> );
+		%else
 					return( OSQP_INFTY );
-		#endif // OSQP_NONFINITE
+		%endif
 		  }
 
 		#ifdef __cplusplus
