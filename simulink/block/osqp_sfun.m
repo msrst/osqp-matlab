@@ -299,7 +299,7 @@ function WriteRTW(block)
   %----------------------------------------------------------------
 
   % Determine if long long is supported
-  longLongYes = get_param('quadcopter_example', 'ProdLongLongMode');
+  longLongYes = get_param(bdroot, 'ProdLongLongMode');
   useLongLong = false;
   if ( strcmp(longLongYes, 'on') )
     useLongLong = true;
@@ -341,7 +341,7 @@ function WriteRTW(block)
   end
 
   % Determine if nonfinite numbers are supported
-  nonfinite = get_param('quadcopter_example', 'SupportNonFinite');
+  nonfinite = get_param(bdroot, 'SupportNonFinite');
   switch (nonfinite)
   case 'on'
     block.WriteRTWParam('matrix', 'nonfinite', 1);
