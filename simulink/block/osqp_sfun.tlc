@@ -90,10 +90,6 @@
   %<LibAddToCommonIncludes("osqp.h")>
   %<LibAddToCommonIncludes("%<srcFileName>.h")>
 
-  %% Call the TLC that will setup the compiler paths & sources
-  %if FILE_EXISTS("%<ParamSettings.osqp_buildInfoTLC>")
-  	%include "%<ParamSettings.osqp_buildInfoTLC>"
-  %endif
 %endfunction
 
 

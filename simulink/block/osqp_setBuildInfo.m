@@ -2,10 +2,13 @@ function osqp_setBuildInfo( buildInfo )
 %OSQP_SETBUILDINFO Add the generated OSQP sources and includes to the RTW build process
 %
 % This function will add the OSQP generated source files and includes to the
-% Matlab build path.
+% Matlab build path using the buildInfo object.
 % 
-% This function is designed to be called as the PostCodeGenCommand for a Simulink model.
-% This setting can be found in Configuration Parameters->Code Generation (Advanced Parameters)
+% By default, this function is called using a make_rtw_hook function. A sample hook
+% can be found in osqp_makeRTWHook.m. If desired, this function can be called from a
+% user-written make_rtw_hook function by placing the command
+%   osqp_setBuildInfo( buildInfo );
+% inside the case for the after-tlc hook.
 %
 
   disp('  Adding OSQP files and paths to the build process');
@@ -36,15 +39,9 @@ function osqp_setBuildInfo( buildInfo )
     buildInfo.addSourceFiles( srcFiles(i).name );
   end
 
-  %% Add a define to say if nonfinite number support is included by RTW
-  nonfinite = get_param('quadcopter_example', 'SupportNonFinite');
-  switch (nonfinite)
-  case 'on'
-    buildInfo.addDefines('-DOSQP_NONFINITE');
-  case 'off'
-
-  otherwise
-    error('Unable to determine if nonfinite numbers are supported');
+  %% If running on linux, include the c99 option so GCC uses c99 to compile
+  if ( ~ismac() && isunix() )
+    buildInfo.addCompileFlags('-std=c99', 'OPTS');
   end
 
 end

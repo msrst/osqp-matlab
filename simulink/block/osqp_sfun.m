@@ -380,11 +380,20 @@ function WriteRTW(block)
   block.WriteRTWParam('string', 'osqp_workspace', workspaceName);
   block.WriteRTWParam('string', 'osqp_workspaceFile', fullfile(osqpDir, 'src', 'osqp', workspaceName) );
 
-  % Make the TLC that tells the compiler where to find all the files
-  osqp_makeBuildInfoTLC( osqpDir, buildDir );
-  buildInfoTLC = fullfile(osqpDir, 'osqp_build.tlc');
-  block.WriteRTWParam('string', 'osqp_buildInfoTLC', buildInfoTLC);
 
-
+  %% Check to make sure that the hook file is on the path and error if not
+  %----------------------------------------------------------------
+  tmf = get_param(bdroot, 'SystemTargetFile');
+  [~, tar, ~] = fileparts(tmf);
+  hookName = [tar, '_make_rtw_hook.m'];
+  
+  eval(['hookExist = which(''', hookName, ''');'])
+  if ( isempty(hookExist) )
+      errTxt = ['Unable to find the file ', hookName, ' on the path.'];
+      errTxt = [errTxt, ' Please copy the file simulink/block/osqp_makeRTWHook.m'];
+      errTxt = [errTxt, ' to your working directory and rename it to ' hookName];
+      error(errTxt);
+  end
+  
 
 %endfunction
