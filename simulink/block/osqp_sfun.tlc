@@ -10,8 +10,8 @@
 %% This function is called once for the entire model
 %function BlockTypeSetup(block, system) void
 
-	%assign nonfinite = %<ParamSettings.nonfinite>[0]
-	
+  %assign nonfinite = %<ParamSettings.nonfinite>[0]
+  
 
   %% Create a header file that contains inline functions prototype to handle the
   %% nonfinite checking and conversion
@@ -20,73 +20,90 @@
   %openfile hFile = "%<srcFileName>.h"
   
   %selectfile hFile
-		  #ifndef _%<hFileNameMacro>_H_
-		  #define _%<hFileNameMacro>_H_
+      #ifndef _%<hFileNameMacro>_H_
+      #define _%<hFileNameMacro>_H_
 
-		  #include "osqp.h"
+      #include "osqp.h"
 
-			%% Include this if non-finite numbers are supported
-			%if nonfinite == 1
-				#include <rt_nonfinite.h>
-			%endif
+      %% Include this if non-finite numbers are supported
+      %if nonfinite == 1
+        #include <rt_nonfinite.h>
+      %endif
 
 
-		#ifdef __cplusplus
-			extern "C" {
-		#endif // _cplusplus
+    #ifdef __cplusplus
+      extern "C" {
+    #endif // _cplusplus
 
-		  static inline c_float nonfinite_toOSQP( c_float val ) {
-		  	c_float retval = val;
-		%if nonfinite == 1
-				if ( val == %<LibRealNonFinite("nan")> ) {
-					retval = OSQP_NAN;
-				} else if ( val == %<LibRealNonFinite("-inf")> ) {
-					retval = -OSQP_INFTY;
-				} else if ( val == %<LibRealNonFinite("inf")> ) {
-					retval = OSQP_INFTY;
-				}
-		%endif
-			return( retval );
-		  }
+      // Convert the Matlab nonfinite numbers into OSQP nonfinite numbers
+      static inline c_float nonfinite_toOSQP( c_float val ) {
+        c_float retval = val;
+    %if nonfinite == 1
+        // Nonfinite numbers supported, perform full conversion
+        if ( val == %<LibRealNonFinite("nan")> ) {
+          retval = OSQP_NAN;
+        } else if ( val == %<LibRealNonFinite("-inf")> ) {
+          retval = -OSQP_INFTY;
+        } else if ( val == %<LibRealNonFinite("inf")> ) {
+          retval = OSQP_INFTY;
+        }
+    %else
+        // Nonfinite numbers not supported, no checks to do
+    %endif
+        return( retval );
+      }
 
-		  static inline real_T nonfinite_fromOSQP( c_float val ) {
-		  	c_float retval = (real_T) val;
-		%if nonfinite == 1
-				if ( val == OSQP_NAN ) {
-					retval = %<LibRealNonFinite("nan")>;
-				} else if ( val < -OSQP_INFTY ) {
-					retval = %<LibRealNonFinite("-inf")>;
-				} else if ( val > OSQP_INFTY ) {
-					retval = %<LibRealNonFinite("inf")>;
-				}
-		%endif
-			return( retval );
-		  }
+      // Convert the OSQP nonfinite numbers into Matlab nonfinite numbers
+      static inline real_T nonfinite_fromOSQP( c_float val ) {
+        c_float retval = (real_T) val;
+    %if nonfinite == 1
+        // Nonfinite numbers supported, perform full conversion
+        if ( val == OSQP_NAN ) {
+          retval = %<LibRealNonFinite("nan")>;
+        } else if ( val < -OSQP_INFTY ) {
+          retval = %<LibRealNonFinite("-inf")>;
+        } else if ( val > OSQP_INFTY ) {
+          retval = %<LibRealNonFinite("inf")>;
+        }
+    %else
+        // Nonfinite numbers not supported, convert NaN into 0
+        if ( val == OSQP_NAN ) {
+          retval = 0.0;
+        }
+    %endif
+        return( retval );
+      }
 
-		  static inline real_T nonfinite_NaNOSQP( ) {
-		%if nonfinite == 1
-					return( %<LibRealNonFinite("nan")> );
-		%else
-					return( OSQP_INFTY );
-		%endif
-		  }
+      // Convert OSQP NaN into Matlab NaN
+      static inline real_T nonfinite_NaNOSQP( ) {
+    %if nonfinite == 1
+        // Nonfinite numbers supported, return Matlab NaN
+        return( %<LibRealNonFinite("nan")> );
+    %else
+        // Nonfinite numbers not supported, returning OSQP infinity
+        return( OSQP_INFTY );
+    %endif
+      }
 
-		  static inline real_T nonfinite_infOSQP( ) {
-		%if nonfinite == 1
-					return( %<LibRealNonFinite("inf")> );
-		%else
-					return( OSQP_INFTY );
-		%endif
-		  }
+      // Convert OSQP inf into Matlab inf
+      static inline real_T nonfinite_infOSQP( ) {
+    %if nonfinite == 1
+        // Nonfinite numbers supported, return Matlab inf
+        return( %<LibRealNonFinite("inf")> );
+    %else
+        // Nonfinite numbers not supported, returning OSQP infinity
+        return( OSQP_INFTY );
+    %endif
+      }
 
-		#ifdef __cplusplus
-			}
-		#endif // _cplusplus
+    #ifdef __cplusplus
+      }
+    #endif // _cplusplus
 
-		#endif // _%<hFileNameMacro>_H_
+    #endif // _%<hFileNameMacro>_H_
   %closefile hFile
 
-	%% Add the main osqp header and the generated one to the project
+  %% Add the main osqp header and the generated one to the project
   %<LibAddToCommonIncludes("osqp.h")>
   %<LibAddToCommonIncludes("%<srcFileName>.h")>
 
@@ -109,153 +126,153 @@
 %%
 %% This function creates the code that is placed inside the MdlOutputs function
 %function Outputs(block, system) Output
-	%% Create various variables used in the generation
+  %% Create various variables used in the generation
   %assign workspace     = "%<ParamSettings.osqp_workspace>"
   %assign numnnzA       = CAST( "Number", %<ParamSettings.numnnzA>[0])
   %assign numnnzP       = CAST( "Number", %<ParamSettings.numnnzP>[0])
-	%assign numCon        = CAST( "Number", %<ParamSettings.numCon>[0])
-	%assign numPrimalVar  = CAST( "Number", %<ParamSettings.numVar>[0])
-	%assign numDualVar    = %<numCon>
-	%assign primalLoopMax = %<numPrimalVar>-1
-	%assign dualLoopMax   = %<numDualVar>-1
+  %assign numCon        = CAST( "Number", %<ParamSettings.numCon>[0])
+  %assign numPrimalVar  = CAST( "Number", %<ParamSettings.numVar>[0])
+  %assign numDualVar    = %<numCon>
+  %assign primalLoopMax = %<numPrimalVar>-1
+  %assign dualLoopMax   = %<numDualVar>-1
 
-	%%-------------------------------------------------
-	// Declare the variables used in the update routines
-	%if %<ParamSettings.updateq>[0] != 0
-		static c_float q_up[%<numPrimalVar>];
-	%endif
-	%if %<ParamSettings.updatelu>[0] != 0
-		static c_float l_up[%<numCon>];
-		static c_float u_up[%<numCon>];
-	%endif
-	%if %<ParamSettings.updateAP>[0] != 0
-		static c_float A_up[%<numnnzA>];
-		static c_float A_up_idx[%<numnnzA>];
-		static c_float P_up[%<numnnzP>];
-		static c_float P_up_idx[%<numnnzP>];
-	%endif
+  %%-------------------------------------------------
+  // Declare the variables used in the update routines
+  %if %<ParamSettings.updateq>[0] != 0
+    static c_float q_up[%<numPrimalVar>];
+  %endif
+  %if %<ParamSettings.updatelu>[0] != 0
+    static c_float l_up[%<numCon>];
+    static c_float u_up[%<numCon>];
+  %endif
+  %if %<ParamSettings.updateAP>[0] != 0
+    static c_float A_up[%<numnnzA>];
+    static c_float A_up_idx[%<numnnzA>];
+    static c_float P_up[%<numnnzP>];
+    static c_float P_up_idx[%<numnnzP>];
+  %endif
 
-	%%-------------------------------------------------
-	// Call the update routines
-	%if %<ParamSettings.updateq>[0] == 1
-		// Iterate through the q vector to find NaN and Inf values
-		%roll idx=DataInputPort[6].RollRegions, lcv=RollThreshold, block, "Roller", "U"
-			q_up[%<idx>] = nonfinite_toOSQP( (c_float) %<LibBlockInputSignal(6, "", lcv, idx)> );
-		%endroll
+  %%-------------------------------------------------
+  // Call the update routines
+  %if %<ParamSettings.updateq>[0] == 1
+    // Iterate through the q vector to find NaN and Inf values
+    %roll idx=DataInputPort[6].RollRegions, lcv=RollThreshold, block, "Roller", "U"
+      q_up[%<lcv>] = nonfinite_toOSQP( (c_float) %<LibBlockInputSignal(6, "", lcv, idx)> );
+    %endroll
 
-		// Call the update routine
-		c_int err = osqp_update_lin_cost( &%<workspace>, q_up );
-		if ( err != 0 ) {
-			%assign errStr = "\"Error updating the q vector\""
-			%<LibSetRTModelErrorStatus(errStr)>;
-		}
-	%endif
+    // Call the update routine
+    c_int err = osqp_update_lin_cost( &%<workspace>, q_up );
+    if ( err != 0 ) {
+      %assign errStr = "\"Error updating the q vector\""
+      %<LibSetRTModelErrorStatus(errStr)>;
+    }
+  %endif
 
-	%if %<ParamSettings.updatelu>[0] == 1
-		// Iterate through the l and u vectors to find NaN and Inf values
-		%roll idx=DataInputPort[8].RollRegions, lcv=RollThreshold, block, "Roller", "U"
-			l_up[%<idx>] = nonfinite_toOSQP( (c_float) %<LibBlockInputSignal(7, "", lcv, idx)> );
-			u_up[%<idx>] = nonfinite_toOSQP( (c_float) %<LibBlockInputSignal(8, "", lcv, idx)> );
-		%endroll
+  %if %<ParamSettings.updatelu>[0] == 1
+    // Iterate through the l and u vectors to find NaN and Inf values
+    %roll idx=DataInputPort[8].RollRegions, lcv=RollThreshold, block, "Roller", "U"
+      l_up[%<lcv>] = nonfinite_toOSQP( (c_float) %<LibBlockInputSignal(7, "", lcv, idx)> );
+      u_up[%<lcv>] = nonfinite_toOSQP( (c_float) %<LibBlockInputSignal(8, "", lcv, idx)> );
+    %endroll
 
-		// Call the update routine
-		c_int err = osqp_update_bounds( &%<workspace>, l_up, u_up );
-		if ( err != 0 ) {
-			%assign errStr = "\"Error updating the u and l vectors\""
-			%<LibSetRTModelErrorStatus(errStr)>;
-		}
-	%endif
+    // Call the update routine
+    c_int err = osqp_update_bounds( &%<workspace>, l_up, u_up );
+    if ( err != 0 ) {
+      %assign errStr = "\"Error updating the u and l vectors\""
+      %<LibSetRTModelErrorStatus(errStr)>;
+    }
+  %endif
 
-	%%-------------------------------------------------
-	// Call the OSQP solver
-	osqp_solve( &%<workspace> );
+  %%-------------------------------------------------
+  // Call the OSQP solver
+  osqp_solve( &%<workspace> );
 
-	%%-------------------------------------------------
-	// Parse the result
-	c_int status = (&%<workspace>)->info->status_val;
-	if ( ( status != OSQP_PRIMAL_INFEASIBLE) &&
+  %%-------------------------------------------------
+  // Parse the result
+  c_int status = (&%<workspace>)->info->status_val;
+  if ( ( status != OSQP_PRIMAL_INFEASIBLE) &&
        ( status != OSQP_DUAL_INFEASIBLE) ) {
     // The result is valid
-		%roll idx=[0:%<primalLoopMax>], lcv=RollThreshold, block, "Roller", "Y"
-			// Copy the primal solution and set the primal infeasibility certificate to NaN
-			%<LibBlockOutputSignal(0, "", lcv, idx)> = (real_T) nonfinite_fromOSQP( (&%<workspace>)->solution->x[%<idx>] );
-			%<LibBlockOutputSignal(2, "", lcv, idx)> = (real_T) nonfinite_NaNOSQP();
-		%endroll
-		%roll idx=[0:%<dualLoopMax>], lcv=RollThreshold, block, "Roller", "Y"
-			// Copy the dual solution and set the dual infeasibiility certificate to NaN
-			%<LibBlockOutputSignal(1, "", lcv, idx)> = (real_T) nonfinite_fromOSQP( (&%<workspace>)->solution->x[%<idx>] );
-			%<LibBlockOutputSignal(3, "", lcv, idx)> = (real_T) nonfinite_NaNOSQP();
-		%endroll
-	} else if( ( status == OSQP_PRIMAL_INFEASIBLE ) ||
+    %roll idx=[0:%<primalLoopMax>], lcv=RollThreshold, block, "Roller", "Y"
+      // Copy the primal solution and set the primal infeasibility certificate to NaN
+      %<LibBlockOutputSignal(0, "", lcv, idx)> = (real_T) nonfinite_fromOSQP( (&%<workspace>)->solution->x[%<lcv>] );
+      %<LibBlockOutputSignal(2, "", lcv, idx)> = (real_T) nonfinite_NaNOSQP();
+    %endroll
+    %roll idx=[0:%<dualLoopMax>], lcv=RollThreshold, block, "Roller", "Y"
+      // Copy the dual solution and set the dual infeasibiility certificate to NaN
+      %<LibBlockOutputSignal(1, "", lcv, idx)> = (real_T) nonfinite_fromOSQP( (&%<workspace>)->solution->x[%<lcv>] );
+      %<LibBlockOutputSignal(3, "", lcv, idx)> = (real_T) nonfinite_NaNOSQP();
+    %endroll
+  } else if( ( status == OSQP_PRIMAL_INFEASIBLE ) ||
              ( status == OSQP_PRIMAL_INFEASIBLE_INACCURATE) ) {
-		// Primal infeasible
-		%roll idx=[0:%<primalLoopMax>], lcv=RollThreshold, block, "Roller", "Y"
-			// Set the primal solution to NaN and copy the primal infeasibility certificate
-			%<LibBlockOutputSignal(0, "", lcv, idx)> = (real_T) nonfinite_NaNOSQP();
-			%<LibBlockOutputSignal(2, "", lcv, idx)> = (real_T) nonfinite_fromOSQP( (&%<workspace>)->delta_y[%<idx>] );
-		%endroll
-		%roll idx=[0:%<dualLoopMax>], lcv=RollThreshold, block, "Roller", "Y"
-			// Set the dual solution and dual infeasibiility certificate to NaN
-			%<LibBlockOutputSignal(1, "", lcv, idx)> = (real_T) nonfinite_NaNOSQP();
-			%<LibBlockOutputSignal(3, "", lcv, idx)> = (real_T) nonfinite_NaNOSQP();
-		%endroll
+    // Primal infeasible
+    %roll idx=[0:%<primalLoopMax>], lcv=RollThreshold, block, "Roller", "Y"
+      // Set the primal solution to NaN and copy the primal infeasibility certificate
+      %<LibBlockOutputSignal(0, "", lcv, idx)> = (real_T) nonfinite_NaNOSQP();
+      %<LibBlockOutputSignal(2, "", lcv, idx)> = (real_T) nonfinite_fromOSQP( (&%<workspace>)->delta_y[%<lcv>] );
+    %endroll
+    %roll idx=[0:%<dualLoopMax>], lcv=RollThreshold, block, "Roller", "Y"
+      // Set the dual solution and dual infeasibiility certificate to NaN
+      %<LibBlockOutputSignal(1, "", lcv, idx)> = (real_T) nonfinite_NaNOSQP();
+      %<LibBlockOutputSignal(3, "", lcv, idx)> = (real_T) nonfinite_NaNOSQP();
+    %endroll
 
-		// Set objective value to infinity
+    // Set objective value to infinity
     (&%<workspace>)->info->obj_val = nonfinite_infOSQP();
 
-	} else {
-		// Dual infeasible
-		%roll idx=[0:%<primalLoopMax>], lcv=RollThreshold, block, "Roller", "Y"
-			// Set the primal solution to NaN and copy the primal infeasibility certificate
-			%<LibBlockOutputSignal(0, "", lcv, idx)> = (real_T) nonfinite_NaNOSQP();
-			%<LibBlockOutputSignal(2, "", lcv, idx)> = (real_T) nonfinite_NaNOSQP();
-		%endroll
-		%roll idx=[0:%<dualLoopMax>], lcv=RollThreshold, block, "Roller", "Y"
-			// Set the dual solution and dual infeasibiility certificate to NaN
-			%<LibBlockOutputSignal(1, "", lcv, idx)> = (real_T) nonfinite_NaNOSQP();
-			%<LibBlockOutputSignal(3, "", lcv, idx)> = (real_T) nonfinite_fromOSQP( (&%<workspace>)->delta_x[%<idx>] );
-		%endroll
+  } else {
+    // Dual infeasible
+    %roll idx=[0:%<primalLoopMax>], lcv=RollThreshold, block, "Roller", "Y"
+      // Set the primal solution and primal infeasibility certificate to NaN
+      %<LibBlockOutputSignal(0, "", lcv, idx)> = (real_T) nonfinite_NaNOSQP();
+      %<LibBlockOutputSignal(2, "", lcv, idx)> = (real_T) nonfinite_NaNOSQP();
+    %endroll
+    %roll idx=[0:%<dualLoopMax>], lcv=RollThreshold, block, "Roller", "Y"
+      // Set the dual solution to NaN and copy the dual infeasibiility certificate
+      %<LibBlockOutputSignal(1, "", lcv, idx)> = (real_T) nonfinite_NaNOSQP();
+      %<LibBlockOutputSignal(3, "", lcv, idx)> = (real_T) nonfinite_fromOSQP( (&%<workspace>)->delta_x[%<lcv>] );
+    %endroll
 
-		// Set objective value to infinity
+    // Set objective value to infinity
     (&%<workspace>)->info->obj_val = nonfinite_infOSQP();
-	}
+  }
 
   if ((&workspace)->info->status_val == OSQP_NON_CVX) {
-  	// The problem is nonconvex
+    // The problem is nonconvex
     (&%<workspace>)->info->obj_val = nonfinite_NaNOSQP();
-	}
+  }
 
-	%%-------------------------------------------------
-	// Copy the solver information to the outputs
+  %%-------------------------------------------------
+  // Copy the solver information to the outputs
   %<LibBlockOutputSignal(04, "", "", 0)> = (&%<workspace>)->info->iter;
   %<LibBlockOutputSignal(05, "", "", 0)> = (&%<workspace>)->info->status_val;
-	#ifndef EMBEDDED
-		%<LibBlockOutputSignal(06, "", "", 0)> = (&%<workspace>)->info->status_polish;
-	#else
-  	%<LibBlockOutputSignal(06, "", "", 0)> = 0;
-	#endif // ifndef EMBEDDED
+  #ifndef EMBEDDED
+    %<LibBlockOutputSignal(06, "", "", 0)> = (&%<workspace>)->info->status_polish;
+  #else
+    %<LibBlockOutputSignal(06, "", "", 0)> = 0;
+  #endif // ifndef EMBEDDED
   %<LibBlockOutputSignal(07, "", "", 0)> = (&%<workspace>)->info->obj_val;
   %<LibBlockOutputSignal(08, "", "", 0)> = (&%<workspace>)->info->pri_res;
   %<LibBlockOutputSignal(09, "", "", 0)> = (&%<workspace>)->info->dua_res;
   #ifdef PROFILING
-  	%<LibBlockOutputSignal(10, "", "", 0)> = (&%<workspace>)->info->setup_time;
-  	%<LibBlockOutputSignal(11, "", "", 0)> = (&%<workspace>)->info->solve_time;
-  	%<LibBlockOutputSignal(12, "", "", 0)> = (&%<workspace>)->info->update_time;
-  	%<LibBlockOutputSignal(13, "", "", 0)> = (&%<workspace>)->info->polish_time;
-  	%<LibBlockOutputSignal(14, "", "", 0)> = (&%<workspace>)->info->run_time;
+    %<LibBlockOutputSignal(10, "", "", 0)> = (&%<workspace>)->info->setup_time;
+    %<LibBlockOutputSignal(11, "", "", 0)> = (&%<workspace>)->info->solve_time;
+    %<LibBlockOutputSignal(12, "", "", 0)> = (&%<workspace>)->info->update_time;
+    %<LibBlockOutputSignal(13, "", "", 0)> = (&%<workspace>)->info->polish_time;
+    %<LibBlockOutputSignal(14, "", "", 0)> = (&%<workspace>)->info->run_time;
   #else
-		%<LibBlockOutputSignal(10, "", "", 0)> = 0;
-  	%<LibBlockOutputSignal(11, "", "", 0)> = 0;
-  	%<LibBlockOutputSignal(12, "", "", 0)> = 0;
-  	%<LibBlockOutputSignal(13, "", "", 0)> = 0;
-  	%<LibBlockOutputSignal(14, "", "", 0)> = 0;
+    %<LibBlockOutputSignal(10, "", "", 0)> = 0;
+    %<LibBlockOutputSignal(11, "", "", 0)> = 0;
+    %<LibBlockOutputSignal(12, "", "", 0)> = 0;
+    %<LibBlockOutputSignal(13, "", "", 0)> = 0;
+    %<LibBlockOutputSignal(14, "", "", 0)> = 0;
   #endif // ifdef PROFILING
   #if EMBEDDED != 1
-  	%<LibBlockOutputSignal(15, "", "", 0)> = (&%<workspace>)->info->rho_updates;
-  	%<LibBlockOutputSignal(16, "", "", 0)> = (&%<workspace>)->info->rho_estimate;
+    %<LibBlockOutputSignal(15, "", "", 0)> = (&%<workspace>)->info->rho_updates;
+    %<LibBlockOutputSignal(16, "", "", 0)> = (&%<workspace>)->info->rho_estimate;
   #else
-		%<LibBlockOutputSignal(15, "", "", 0)> = 0;
-  	%<LibBlockOutputSignal(16, "", "", 0)> = 0;
+    %<LibBlockOutputSignal(15, "", "", 0)> = 0;
+    %<LibBlockOutputSignal(16, "", "", 0)> = 0;
   #endif // if EMBEDDED != 1
 %endfunction
 
