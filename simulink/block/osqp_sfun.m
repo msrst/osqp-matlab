@@ -105,10 +105,10 @@ function Output(block)
   %-----------------------------------------------------
   refactor  = block.InputPort(1).Data;
   warmstart = block.InputPort(2).Data;
-  Px        = block.InputPort(3).Data;
-  Px_idx    = block.InputPort(4).Data;
-  Ax        = block.InputPort(5).Data;
-  Ax_idx    = block.InputPort(6).Data;
+  Px_idx    = block.InputPort(3).Data;
+  Px        = block.InputPort(4).Data;
+  Ax_idx    = block.InputPort(5).Data;
+  Ax        = block.InputPort(6).Data;
   q         = block.InputPort(7).Data;
   l         = block.InputPort(8).Data;
   u         = block.InputPort(9).Data;
