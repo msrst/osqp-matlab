@@ -191,7 +191,7 @@
 
   %if %<ParamSettings.updateAP>[0] == 1
     // Iterate through the A and P matrices find NaN and Inf values
-    %roll idx=DataInputPort[6].RollRegions, lcv=RollThreshold, block, "Roller", "U"
+    %roll idx=DataInputPort[5].RollRegions, lcv=RollThreshold, block, "Roller", "U"
       A_up[%<lcv>]     = nonfinite_toOSQP( (c_float) %<LibBlockInputSignal(5, "", lcv, idx)> );
       A_up_idx[%<lcv>] = (c_int) %<LibBlockInputSignal(4, "", lcv, idx)> - 1;
     %endroll
