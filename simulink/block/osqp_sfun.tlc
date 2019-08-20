@@ -1,4 +1,4 @@
-%% 
+%%
 %% Target Language Compiler file to support code generation in OSQP
 %% from the Simulink block.
 %%
@@ -11,14 +11,16 @@
 %function BlockTypeSetup(block, system) void
 
   %assign nonfinite = %<ParamSettings.nonfinite>[0]
-  
+  %assign osqpIncDir = "%<ParamSettings.osqp_inc_dir>"
+
 
   %% Create a header file that contains inline functions prototype to handle the
   %% nonfinite checking and conversion
-  %assign srcFileName = "osqp_nonfinite"
-  %assign hFileNameMacro = FEVAL("upper", srcFileName)
-  %openfile hFile = "%<srcFileName>.h"
-  
+  %assign incFileName = "osqp_nonfinite"
+  %assign incFilePath = FEVAL( "fullfile", osqpIncDir, incFileName )
+  %assign hFileNameMacro = FEVAL("upper", incFileName)
+  %openfile hFile = "%<incFilePath>.h"
+
   %selectfile hFile
       #ifndef _%<hFileNameMacro>_H_
       #define _%<hFileNameMacro>_H_
@@ -105,7 +107,7 @@
 
   %% Add the main osqp header and the generated one to the project
   %<LibAddToCommonIncludes("osqp.h")>
-  %<LibAddToCommonIncludes("%<srcFileName>.h")>
+  %<LibAddToCommonIncludes("%<incFileName>.h")>
 
 %endfunction
 
