@@ -13,9 +13,15 @@ function osqp_setBuildInfo( buildInfo )
 
   disp('  Adding OSQP files and paths to the build process');
 
-  %% Get the directory where the build is happening
-  buildDir = RTW.getBuildDir(bdroot).BuildDirectory;
-  osqpDir = fullfile(buildDir, 'osqp_code');
+  %% Find the directory that the OSQP files were exported to
+  dirFile = [RTW.getBuildDir(bdroot).BuildDirectory, filesep, 'osqpdir.mat'];
+  if( exist(dirFile, 'file') )
+    load(dirFile);
+  else
+    buildDir = RTW.getBuildDir(bdroot).BuildDirectory;
+    osqpDir = fullfile(buildDir, 'osqp_code');
+  end
+  
   
   %% Get the directories where the OSQP sources and includes are located
   osqpIncPath = fullfile(osqpDir, 'include');
@@ -38,6 +44,7 @@ function osqp_setBuildInfo( buildInfo )
 
     buildInfo.addSourceFiles( srcFiles(i).name );
   end
+
 
   %% If running on linux, include the c99 option so GCC uses c99 to compile
   if ( ~ismac() && isunix() )

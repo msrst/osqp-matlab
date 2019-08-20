@@ -2,11 +2,11 @@ function osqp_sfun(block)
 % Level-2 MATLAB file S-Function for OSQP.
 
   setup(block);
-  
+
 %endfunction
 
 function setup(block)
-  
+
   % basic problem sizes
   m  = block.DialogPrm(1).Data;
   n  = block.DialogPrm(2).Data;
@@ -14,9 +14,9 @@ function setup(block)
   %% Register number of input and output ports
   block.NumInputPorts  = 9;  %refactor,warmstart,Px,Px_idx,Ax,Ax_idx,q,l,u
   block.NumOutputPorts = 17; %x,y,prim_inf_cert,dual_inf_cert, various info values
-  
+
   %outputPortSize = [n,m,n,m,ones(1,14)];
-  
+
   % Register the parameters.
   block.NumDialogPrms     = 9; %m,n,P,A,q,l,u, emptysolver, options
   block.DialogPrmsTunable = repmat({'Tunable'},[1 block.NumDialogPrms]);
@@ -25,46 +25,46 @@ function setup(block)
   %% inherited.
   block.SetPreCompInpPortInfoToDynamic;
   block.SetPreCompOutPortInfoToDynamic;
- 
+
   %Set input port properties
   for i = 1:block.NumInputPorts
     block.InputPort(i).DirectFeedthrough = true;
     block.InputPort(i).DatatypeID  = 0;  % double
     block.InputPort(i).Complexity  = 'Real';
   end
-  
+
   %Set output port properties
 
   %initialise all sizes to scalar
   outdims = ones(1,block.NumOutputPorts);
-    
-  %The first four output ports are x,y,prim_cert, dual_cert.   
+
+  %The first four output ports are x,y,prim_cert, dual_cert.
   %everything else is scalar
   outdims(1:4) = [n m m n];
-    
+
   for i = 1:block.NumOutputPorts
     block.OutputPort(i).DatatypeID  = 0;  % double
     block.OutputPort(i).Complexity  = 'Real';
     block.OutputPort(i).SamplingMode = 'Sample';
     block.OutputPort(i).Dimensions = outdims(i);
   end
-  
+
   %% Set block sample time to inherited
   block.SampleTimes = [-1 0];
-  
+
   %% Set the block simStateCompliance to default (i.e., same as a built-in block)
   block.SimStateCompliance = 'DefaultSimState';
 
   %% Run accelerator on TLC
   block.SetAccelRunOnTLC(true);
-  
+
   %% Register methods
-  block.RegBlockMethod('Outputs',@Output);  
+  block.RegBlockMethod('Outputs',@Output);
   block.RegBlockMethod('PostPropagationSetup', @DoPostPropSetup);
   block.RegBlockMethod('SetInputPortSamplingMode', @SetInpPortFrameData);
   block.RegBlockMethod('SetInputPortDimensions', @SetInpPortDims);
   block.RegBlockMethod('WriteRTW', @WriteRTW);
-  
+
 %endfunction
 
 function SetInpPortDims(block, idx, di)
@@ -74,9 +74,9 @@ function SetInpPortDims(block, idx, di)
 function DoPostPropSetup(block)
 
   %solver setup
-  
+
   %the solver object is created as a parameter,
-  %since there is seemingly no place to stash it in the 
+  %since there is seemingly no place to stash it in the
   %internal memory of the block.   In C it would be possible
   %to store it in pwork, but there's no .m s function analogy
 %   m       = block.DialogPrm(1).Data;
@@ -88,7 +88,7 @@ function DoPostPropSetup(block)
   u       = block.DialogPrm(7).Data;
   solver  = block.DialogPrm(8).Data;
   opts    = block.DialogPrm(9).Data;
-  
+
   if(iscell(opts))
     solver.setup(P,q,A,l,u,opts{:})
   else
@@ -112,40 +112,40 @@ function Output(block)
   q         = block.InputPort(7).Data;
   l         = block.InputPort(8).Data;
   u         = block.InputPort(9).Data;
-  
-  
+
+
   %grab parameters and solver data
   %-----------------------------------------------------
   m      = block.DialogPrm(1).Data;
   n      = block.DialogPrm(2).Data;
   solver = block.DialogPrm(8).Data;
-  
-  
+
+
   %construct data updates lists
   %-----------------------------------------------------
   %a list of updates to push to the solver
   updates = {};
-  
+
   %if refactoring is enabled, then add updates to Px etc
   if(refactor)
       updates = [updates,{'Px',Px,'Px_idx',Px_idx,'Ax',Ax,'Ax_idx',Ax_idx}];
   end
-  
+
   %add updates to q/l/u if they are not NaN valued
   if(~any(isnan(q))), updates = [updates,{'q',q}]; end
   if(~any(isnan(l))), updates = [updates,{'l',l}]; end
   if(~any(isnan(u))), updates = [updates,{'u',u}]; end
- 
+
   if(length(updates) > 0)
       solver.update(updates{:})
   end
-  
+
   %reset variables to zero on cold start
   %-----------------------------------------------------
   if(~warmstart)
       solver.warm_start('x',zeros(n,1),'y', zeros(m,1));
   end
-  
+
   %solve and map to outputs
   %-----------------------------------------------------
   sol = solver.solve();
@@ -154,9 +154,9 @@ function Output(block)
   block.OutputPort(02).Data = sol.y;
   block.OutputPort(03).Data = sol.prim_inf_cert;
   block.OutputPort(04).Data = sol.dual_inf_cert;
-  
+
   %will be gathered in second bus
-  block.OutputPort(05).Data = sol.info.iter;  
+  block.OutputPort(05).Data = sol.info.iter;
   block.OutputPort(06).Data = sol.info.status_val;
   block.OutputPort(07).Data = sol.info.status_polish;
   block.OutputPort(08).Data = sol.info.obj_val;
@@ -169,14 +169,14 @@ function Output(block)
   block.OutputPort(15).Data = sol.info.run_time;
   block.OutputPort(16).Data = sol.info.rho_updates;
   block.OutputPort(17).Data = sol.info.rho_estimate;
-  
+
 %endfunction
 
 function SetInpPortFrameData(block, idx, fd)
-  
+
   block.InputPort(idx).SamplingMode = fd;
   block.OutputPort(1).SamplingMode  = fd;
-  
+
 %endfunction
 
 function WriteRTW(block)
@@ -197,7 +197,7 @@ function WriteRTW(block)
   solver  = block.DialogPrm(8).Data;
   opts    = block.DialogPrm(9).Data;
 
-  %% Save the problem parameters to the RTW file for code generation. 
+  %% Save the problem parameters to the RTW file for code generation.
   block.WriteRTWParam('matrix', 'numCon', m);
   block.WriteRTWParam('matrix', 'numVar', n);
   block.WriteRTWParam('matrix', 'numnnzP', nnz(P));
@@ -230,7 +230,7 @@ function WriteRTW(block)
   switch refactor_style
     case {'Never'}
       updateAP = 0;
-      updateParam = 'vectors';  
+      updateParam = 'vectors';
 
     case {'Always'}
       updateAP = 1;
@@ -245,7 +245,7 @@ function WriteRTW(block)
 
   end
   block.WriteRTWParam('matrix', 'updateAP', updateAP);
-  
+
   % Determine if warmstarting is used
   warmstart_style  = get_param(parentBlock,'warmstart_style');
   switch warmstart_style
@@ -257,7 +257,7 @@ function WriteRTW(block)
 
     case {'Triggered'}
       warmstart = 2;
-      
+
     otherwise
       error('Unrecognized warmstart option');
 
@@ -272,7 +272,7 @@ function WriteRTW(block)
 
     case {'on'}
       updateq = 1;
-      
+
     otherwise
       error('Unrecognized q update');
 
@@ -287,7 +287,7 @@ function WriteRTW(block)
 
     case {'on'}
       updatelu = 1;
-      
+
     otherwise
       error('Unrecognized bounds update');
 
@@ -315,12 +315,12 @@ function WriteRTW(block)
 
   % Determine the floating point data type to use
   dt = get_param(gcb, 'CompiledPortDataTypes');
-  
+
   isdoublei = all( cellfun( @(x) strcmp(x, 'double'), dt.Inport) );
   isdoubleo = all( cellfun( @(x) strcmp(x, 'double'), dt.Outport) );
   isfloati  = all( cellfun( @(x) strcmp(x, 'single'), dt.Inport) );
   isfloato  = all( cellfun( @(x) strcmp(x, 'single'), dt.Outport) );
-  
+
   if (isdoublei && isdoubleo)
     % All inputs and outputs are double
     useFloat = false;
@@ -359,10 +359,31 @@ function WriteRTW(block)
 
   workspaceName = 'workspace';
 
-  % Get the directory where the build is happening
-  buildDir = RTW.getBuildDir(bdroot).BuildDirectory;
-  osqpDir  = fullfile(buildDir, 'osqp_code');
-  
+  % The file where the custom OSQP build directory is saved
+  dirFile = [RTW.getBuildDir(bdroot).BuildDirectory, filesep, 'osqpdir.mat'];
+  if( exist(dirFile, 'file') )
+    delete(dirFile);
+  end
+
+  % Figure out where to export the OSQP sources to
+  p = Simulink.Mask.get(parentBlock);
+  isCustom = p.Parameters(11).Value;
+
+  if ( strcmp(isCustom, 'on') )
+    % User-specified export location
+    osqpDir = p.Parameters(12).Value;
+    osqpDir = osqpDir(2:end-1);
+
+    % Save the OSQP directory for the hook file
+    save(dirFile, 'osqpDir');
+  else
+    % Default export location
+    buildDir = RTW.getBuildDir(bdroot).BuildDirectory;
+    osqpDir  = fullfile(buildDir, 'osqp_code');
+  end
+
+  disp(['  Generating OSQP source files into ', osqpDir]);
+
   % Call the code generation routine for the solver
   solver.codegen(osqpDir,...
                  'parameters', updateParam,...
@@ -386,7 +407,7 @@ function WriteRTW(block)
   tmf = get_param(bdroot, 'SystemTargetFile');
   [~, tar, ~] = fileparts(tmf);
   hookName = [tar, '_make_rtw_hook.m'];
-  
+
   eval(['hookExist = which(''', hookName, ''');'])
   if ( isempty(hookExist) )
       errTxt = ['Unable to find the file ', hookName, ' on the path.'];
@@ -394,6 +415,6 @@ function WriteRTW(block)
       errTxt = [errTxt, ' to your working directory and rename it to ' hookName];
       error(errTxt);
   end
-  
+
 
 %endfunction
