@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.233"
+    ComputedModelVersion    "1.239"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -40,7 +40,7 @@ Model {
       $ObjectID		      3
       $ClassName	      "Simulink.WindowInfo"
       IsActive		      [1]
-      Location		      [0.0, 27.0, 1920.0, 1028.0]
+      Location		      [0.0, 27.0, 960.0, 1028.0]
       Object {
 	$PropName		"ModelBrowserInfo"
 	$ObjectID		4
@@ -65,9 +65,9 @@ Model {
 	  IsActive		  [1]
 	  ViewObjType		  "SimulinkTopLevel"
 	  LoadSaveID		  "0"
-	  Extents		  [1820.0, 847.0]
-	  ZoomFactor		  [2.14]
-	  Offset		  [377.33666764018693, 94.570093457943955]
+	  Extents		  [725.0, 846.0]
+	  ZoomFactor		  [0.83578738610638181]
+	  Offset		  [422.54961829918261, -214.47416987872555]
 	}
 	Object {
 	  $ObjectID		  7
@@ -97,9 +97,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "imcinerney"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Tue Aug 20 20:44:40 2019"
-  RTWModifiedTimeStamp	  488234660
-  ModelVersionFormat	  "1.%<AutoIncrement:233>"
+  LastModifiedDate	  "Tue Aug 20 22:49:31 2019"
+  RTWModifiedTimeStamp	  488242170
+  ModelVersionFormat	  "1.%<AutoIncrement:239>"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
   LibraryLinkDisplay	  "disabled"
@@ -194,7 +194,7 @@ Model {
 	  Version		  "1.15.1"
 	  Components		  []
 	  StartTime		  "0.0"
-	  StopTime		  "10"
+	  StopTime		  "3"
 	  AbsTol		  "auto"
 	  FixedStep		  "auto"
 	  InitialStep		  "auto"
@@ -251,7 +251,7 @@ Model {
 	  StreamToWorkspace	  off
 	  StreamVariableName	  "streamout"
 	  SaveTime		  on
-	  ReturnWorkspaceOutputs  on
+	  ReturnWorkspaceOutputs  off
 	  StateSaveName		  "xout"
 	  TimeSaveName		  "tout"
 	  OutputSaveName	  "yout"
@@ -760,8 +760,8 @@ Model {
 	PropName		"Components"
       }
       Name		      "Configuration"
-      CurrentDlgPage	      "Code Generation/Interface"
-      ConfigPrmDlgPosition    [ 143, 119, 1133, 789 ]
+      CurrentDlgPage	      "Data Import//Export"
+      ConfigPrmDlgPosition    [ 140, 42, 1130, 712 ]
       ExtraOptions	      "-aBlockCommentType=\"BlockPathComment\" -aIgnoreTestpoints=0 "
     }
     PropName		    "ConfigurationSets"
@@ -973,6 +973,17 @@ Model {
       BlockType		      Terminator
     }
     Block {
+      BlockType		      ToWorkspace
+      VariableName	      "simulink_output"
+      MaxDataPoints	      "1000"
+      Decimation	      "1"
+      SaveFormat	      "Array"
+      Save2DSignal	      "3-D array (concatenate along third dimension)"
+      FixptAsFi		      off
+      NumInputs		      "1"
+      SampleTime	      "0"
+    }
+    Block {
       BlockType		      UnitDelay
       InitialCondition	      "0"
       InputProcessing	      "Elements as channels (sample based)"
@@ -988,7 +999,7 @@ Model {
   }
   System {
     Name		    "nonlinear_crane_example_codegen"
-    Location		    [0, 27, 1920, 1055]
+    Location		    [0, 27, 960, 1055]
     Open		    off
     ModelBrowserVisibility  on
     ModelBrowserWidth	    200
@@ -1000,9 +1011,9 @@ Model {
     TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
     TiledPageScale	    1
     ShowPageBoundaries	    off
-    ZoomFactor		    "214"
+    ZoomFactor		    "84"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    "50"
+    SIDHighWatermark	    "52"
     Block {
       BlockType		      SubSystem
       Name		      "Crane Dynamics"
@@ -1014,7 +1025,7 @@ Model {
       ContentPreviewEnabled   on
       System {
 	Name			"Crane Dynamics"
-	Location		[0, 27, 1920, 1055]
+	Location		[0, 27, 960, 1055]
 	Open			off
 	ModelBrowserVisibility	on
 	ModelBrowserWidth	200
@@ -1096,7 +1107,7 @@ Model {
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
 	    ZoomFactor		    "100"
-	    SIDHighWatermark	    "27"
+	    SIDHighWatermark	    "36"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "u"
@@ -1144,20 +1155,20 @@ Model {
 	    Block {
 	      BlockType		      Demux
 	      Name		      " Demux "
-	      SID		      "19::20"
+	      SID		      "19::35"
 	      Ports		      [1, 1]
 	      Position		      [270, 230, 320, 270]
-	      ZOrder		      11
+	      ZOrder		      26
 	      Outputs		      "1"
 	    }
 	    Block {
 	      BlockType		      S-Function
 	      Name		      " SFunction "
-	      SID		      "19::19"
+	      SID		      "19::34"
 	      Tag		      "Stateflow S-Function nonlinear_crane_example_codegen 2"
 	      Ports		      [5, 2]
-	      Position		      [180, 115, 230, 235]
-	      ZOrder		      10
+	      Position		      [180, 100, 230, 220]
+	      ZOrder		      25
 	      FunctionName	      "sf_sfun"
 	      PortCounts	      "[5 2]"
 	      SFunctionDeploymentMode off
@@ -1170,9 +1181,9 @@ Model {
 	    Block {
 	      BlockType		      Terminator
 	      Name		      " Terminator "
-	      SID		      "19::21"
+	      SID		      "19::36"
 	      Position		      [460, 241, 480, 259]
-	      ZOrder		      12
+	      ZOrder		      27
 	    }
 	    Block {
 	      BlockType		      Outport
@@ -1183,35 +1194,35 @@ Model {
 	      IconDisplay	      "Port number"
 	    }
 	    Line {
-	      ZOrder		      97
+	      ZOrder		      121
 	      SrcBlock		      "u"
 	      SrcPort		      1
 	      DstBlock		      " SFunction "
 	      DstPort		      1
 	    }
 	    Line {
-	      ZOrder		      98
+	      ZOrder		      122
 	      SrcBlock		      "x"
 	      SrcPort		      1
 	      DstBlock		      " SFunction "
 	      DstPort		      2
 	    }
 	    Line {
-	      ZOrder		      99
+	      ZOrder		      123
 	      SrcBlock		      "tau_c"
 	      SrcPort		      1
 	      DstBlock		      " SFunction "
 	      DstPort		      3
 	    }
 	    Line {
-	      ZOrder		      100
+	      ZOrder		      124
 	      SrcBlock		      "tau_l"
 	      SrcPort		      1
 	      DstBlock		      " SFunction "
 	      DstPort		      4
 	    }
 	    Line {
-	      ZOrder		      101
+	      ZOrder		      125
 	      SrcBlock		      "g"
 	      SrcPort		      1
 	      DstBlock		      " SFunction "
@@ -1219,7 +1230,7 @@ Model {
 	    }
 	    Line {
 	      Name		      "dx"
-	      ZOrder		      102
+	      ZOrder		      126
 	      Labels		      [0, 0]
 	      SrcBlock		      " SFunction "
 	      SrcPort		      2
@@ -1227,14 +1238,14 @@ Model {
 	      DstPort		      1
 	    }
 	    Line {
-	      ZOrder		      103
+	      ZOrder		      127
 	      SrcBlock		      " Demux "
 	      SrcPort		      1
 	      DstBlock		      " Terminator "
 	      DstPort		      1
 	    }
 	    Line {
-	      ZOrder		      104
+	      ZOrder		      128
 	      SrcBlock		      " SFunction "
 	      SrcPort		      1
 	      DstBlock		      " Demux "
@@ -1414,7 +1425,7 @@ Model {
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
 	    ZoomFactor		    "100"
-	    SIDHighWatermark	    "36"
+	    SIDHighWatermark	    "45"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "P_idx"
@@ -1480,20 +1491,20 @@ Model {
 	    Block {
 	      BlockType		      Demux
 	      Name		      " Demux "
-	      SID		      "23::20"
+	      SID		      "23::44"
 	      Ports		      [1, 1]
 	      Position		      [270, 315, 320, 355]
-	      ZOrder		      11
+	      ZOrder		      35
 	      Outputs		      "1"
 	    }
 	    Block {
 	      BlockType		      S-Function
 	      Name		      " SFunction "
-	      SID		      "23::19"
+	      SID		      "23::43"
 	      Tag		      "Stateflow S-Function nonlinear_crane_example_codegen 1"
 	      Ports		      [7, 6]
-	      Position		      [180, 120, 230, 280]
-	      ZOrder		      10
+	      Position		      [180, 100, 230, 260]
+	      ZOrder		      34
 	      FunctionName	      "sf_sfun"
 	      PortCounts	      "[7 6]"
 	      SFunctionDeploymentMode off
@@ -1522,9 +1533,9 @@ Model {
 	    Block {
 	      BlockType		      Terminator
 	      Name		      " Terminator "
-	      SID		      "23::21"
+	      SID		      "23::45"
 	      Position		      [460, 326, 480, 344]
-	      ZOrder		      12
+	      ZOrder		      36
 	    }
 	    Block {
 	      BlockType		      Outport
@@ -1571,49 +1582,49 @@ Model {
 	      IconDisplay	      "Port number"
 	    }
 	    Line {
-	      ZOrder		      394
+	      ZOrder		      436
 	      SrcBlock		      "P_idx"
 	      SrcPort		      1
 	      DstBlock		      " SFunction "
 	      DstPort		      1
 	    }
 	    Line {
-	      ZOrder		      395
+	      ZOrder		      437
 	      SrcBlock		      "A_idx"
 	      SrcPort		      1
 	      DstBlock		      " SFunction "
 	      DstPort		      2
 	    }
 	    Line {
-	      ZOrder		      396
+	      ZOrder		      438
 	      SrcBlock		      "x0"
 	      SrcPort		      1
 	      DstBlock		      " SFunction "
 	      DstPort		      3
 	    }
 	    Line {
-	      ZOrder		      397
+	      ZOrder		      439
 	      SrcBlock		      "setpoint"
 	      SrcPort		      1
 	      DstBlock		      " SFunction "
 	      DstPort		      4
 	    }
 	    Line {
-	      ZOrder		      398
+	      ZOrder		      440
 	      SrcBlock		      "lineq"
 	      SrcPort		      1
 	      DstBlock		      " SFunction "
 	      DstPort		      5
 	    }
 	    Line {
-	      ZOrder		      399
+	      ZOrder		      441
 	      SrcBlock		      "uineq"
 	      SrcPort		      1
 	      DstBlock		      " SFunction "
 	      DstPort		      6
 	    }
 	    Line {
-	      ZOrder		      400
+	      ZOrder		      442
 	      SrcBlock		      "traj_pred"
 	      SrcPort		      1
 	      DstBlock		      " SFunction "
@@ -1621,7 +1632,7 @@ Model {
 	    }
 	    Line {
 	      Name		      "P_val"
-	      ZOrder		      401
+	      ZOrder		      443
 	      Labels		      [0, 0]
 	      SrcBlock		      " SFunction "
 	      SrcPort		      2
@@ -1630,7 +1641,7 @@ Model {
 	    }
 	    Line {
 	      Name		      "A_val"
-	      ZOrder		      402
+	      ZOrder		      444
 	      Labels		      [0, 0]
 	      SrcBlock		      " SFunction "
 	      SrcPort		      3
@@ -1639,7 +1650,7 @@ Model {
 	    }
 	    Line {
 	      Name		      "q"
-	      ZOrder		      403
+	      ZOrder		      445
 	      Labels		      [0, 0]
 	      SrcBlock		      " SFunction "
 	      SrcPort		      4
@@ -1648,7 +1659,7 @@ Model {
 	    }
 	    Line {
 	      Name		      "l"
-	      ZOrder		      404
+	      ZOrder		      446
 	      Labels		      [0, 0]
 	      SrcBlock		      " SFunction "
 	      SrcPort		      5
@@ -1657,7 +1668,7 @@ Model {
 	    }
 	    Line {
 	      Name		      "u"
-	      ZOrder		      405
+	      ZOrder		      447
 	      Labels		      [0, 0]
 	      SrcBlock		      " SFunction "
 	      SrcPort		      6
@@ -1665,16 +1676,17 @@ Model {
 	      DstPort		      1
 	    }
 	    Line {
-	      ZOrder		      406
+	      ZOrder		      448
 	      SrcBlock		      " Demux "
 	      SrcPort		      1
 	      DstBlock		      " Terminator "
 	      DstPort		      1
 	    }
 	    Line {
-	      ZOrder		      407
+	      ZOrder		      449
 	      SrcBlock		      " SFunction "
 	      SrcPort		      1
+	      Points		      [20, 0]
 	      DstBlock		      " Demux "
 	      DstPort		      1
 	    }
@@ -1772,7 +1784,7 @@ Model {
 	  }
 	  System {
 	    Name		    "select u_0"
-	    Location		    [0, 27, 1920, 1055]
+	    Location		    [0, 27, 960, 1055]
 	    Open		    off
 	    ModelBrowserVisibility  on
 	    ModelBrowserWidth	    200
@@ -2162,6 +2174,32 @@ Model {
       Floating		      off
     }
     Block {
+      BlockType		      ToWorkspace
+      Name		      "To Workspace"
+      SID		      "52"
+      Ports		      [1]
+      Position		      [1175, 340, 1235, 370]
+      ZOrder		      41
+      VariableName	      "states"
+      MaxDataPoints	      "inf"
+      SaveFormat	      "Structure With Time"
+      FixptAsFi		      on
+      SampleTime	      "-1"
+    }
+    Block {
+      BlockType		      ToWorkspace
+      Name		      "To Workspace1"
+      SID		      "51"
+      Ports		      [1]
+      Position		      [990, 115, 1050, 145]
+      ZOrder		      40
+      VariableName	      "inputs"
+      MaxDataPoints	      "inf"
+      SaveFormat	      "Structure With Time"
+      FixptAsFi		      on
+      SampleTime	      "-1"
+    }
+    Block {
       BlockType		      ZeroOrderHold
       Name		      "Zero-Order\nHold"
       SID		      "20"
@@ -2197,17 +2235,26 @@ Model {
       }
       Branch {
 	ZOrder			33
-	Points			[0, 115; -264, 0]
+	Points			[0, 70]
 	Branch {
-	  ZOrder		  49
-	  Points		  [0, -100]
-	  DstBlock		  "Crane Dynamics"
-	  DstPort		  2
+	  ZOrder		  66
+	  DstBlock		  "To Workspace"
+	  DstPort		  1
 	}
 	Branch {
-	  ZOrder		  26
-	  DstBlock		  "Zero-Order\nHold"
-	  DstPort		  1
+	  ZOrder		  65
+	  Points		  [0, 45; -264, 0]
+	  Branch {
+	    ZOrder		    49
+	    Points		    [0, -100]
+	    DstBlock		    "Crane Dynamics"
+	    DstPort		    2
+	  }
+	  Branch {
+	    ZOrder		    26
+	    DstBlock		    "Zero-Order\nHold"
+	    DstPort		    1
+	  }
 	}
       }
     }
@@ -2219,8 +2266,17 @@ Model {
       Branch {
 	ZOrder			32
 	Points			[0, -85]
-	DstBlock		"Inputs"
-	DstPort			1
+	Branch {
+	  ZOrder		  64
+	  DstBlock		  "Inputs"
+	  DstPort		  1
+	}
+	Branch {
+	  ZOrder		  63
+	  Points		  [0, -55]
+	  DstBlock		  "To Workspace1"
+	  DstPort		  1
+	}
       }
       Branch {
 	ZOrder			31
