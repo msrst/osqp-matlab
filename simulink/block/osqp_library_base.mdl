@@ -1,5 +1,5 @@
 Library {
-  Name			  "osqp_library_old"
+  Name			  "osqp_library_base"
   Version		  8.6
   SavedCharacterEncoding  "UTF-8"
   LibraryType		  "BlockLibrary"
@@ -17,7 +17,7 @@ Library {
       $ObjectID		      2
       $ClassName	      "Simulink.WindowInfo"
       IsActive		      [1]
-      Location		      [1978.0, 132.0, 674.0, 512.0]
+      Location		      [614.0, 261.0, 674.0, 512.0]
       Object {
 	$PropName		"ModelBrowserInfo"
 	$ObjectID		3
@@ -41,21 +41,21 @@ Library {
 	IsActive		[1]
 	ViewObjType		"SimulinkTopLevel"
 	LoadSaveID		"0"
-	Extents			[622.0, 343.0]
+	Extents			[634.0, 345.0]
 	ZoomFactor		[1.0]
 	Offset			[-228.0, -30.5]
       }
     }
   }
-  Created		  "Thu Mar 28 11:18:51 2019"
+  Created		  "Thu Mar 28 12:18:51 2019"
   Creator		  "pgoulart"
   UpdateHistory		  "UpdateHistoryNever"
   ModifiedByFormat	  "%<Auto>"
-  LastModifiedBy	  "im1716"
+  LastModifiedBy	  "imcinerney"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Mon Apr 15 19:28:28 2019"
-  RTWModifiedTimeStamp	  477257307
-  ModelVersionFormat	  "1.%<AutoIncrement:17>"
+  LastModifiedDate	  "Mon Aug 19 14:12:53 2019"
+  RTWModifiedTimeStamp	  488124773
+  ModelVersionFormat	  "1.%<AutoIncrement:32>"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
   LibraryLinkDisplay	  "disabled"
@@ -144,8 +144,8 @@ Library {
 	  SolverMode		  "SingleTasking"
 	  EnableConcurrentExecution off
 	  ConcurrentTasks	  off
-	  Solver		  "VariableStepAuto"
-	  SolverName		  "VariableStepAuto"
+	  Solver		  "ode45"
+	  SolverName		  "ode45"
 	  SolverJacobianMethodControl "auto"
 	  ShapePreserveControl	  "DisableAll"
 	  ZeroCrossControl	  "UseLocalSettings"
@@ -361,10 +361,10 @@ Library {
 	  ProdLargestAtomicFloat  "Float"
 	  ProdIntDivRoundTo	  "Zero"
 	  ProdEndianess		  "LittleEndian"
-	  ProdWordSize		  64
+	  ProdWordSize		  32
 	  ProdShiftRightIntArith  on
 	  ProdLongLongMode	  off
-	  ProdHWDeviceType	  "Intel->x86-64 (Windows64)"
+	  ProdHWDeviceType	  "Specified"
 	  TargetBitPerChar	  8
 	  TargetBitPerShort	  16
 	  TargetBitPerInt	  32
@@ -832,8 +832,8 @@ Library {
     }
   }
   System {
-    Name		    "osqp_library_old"
-    Location		    [1978, 132, 2652, 644]
+    Name		    "osqp_library_base"
+    Location		    [614, 261, 1288, 773]
     Open		    off
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -847,7 +847,97 @@ Library {
     ShowPageBoundaries	    off
     ZoomFactor		    "100"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    "21"
+    SIDHighWatermark	    "27"
+    Block {
+      BlockType		      SubSystem
+      Name		      "MPC Example\n(Quadcopter)"
+      SID		      "17"
+      Ports		      []
+      Position		      [80, 19, 200, 61]
+      ZOrder		      31
+      BackgroundColor	      "cyan"
+      ShowName		      off
+      OpenFcn		      "open_system('quadcopter_example','force');"
+      RequestExecContextInheritance off
+      Object {
+	$PropName		"MaskObject"
+	$ObjectID		19
+	$ClassName		"Simulink.Mask"
+	Display			"disp('MPC Example\\n(Quadcopter)')"
+      }
+      System {
+	Name			"MPC Example\n(Quadcopter)"
+	Location		[1978, 132, 2652, 644]
+	Open			off
+	ModelBrowserVisibility	off
+	ModelBrowserWidth	200
+	ScreenColor		"white"
+	PaperOrientation	"landscape"
+	PaperPositionMode	"auto"
+	PaperType		"usletter"
+	PaperUnits		"inches"
+	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
+	TiledPageScale		1
+	ShowPageBoundaries	off
+	ZoomFactor		"100"
+	Block {
+	  BlockType		  Constant
+	  Name			  "Constant"
+	  SID			  "20"
+	  Position		  [185, 65, 215, 95]
+	  ZOrder		  1
+	}
+	Block {
+	  BlockType		  Terminator
+	  Name			  "Terminator"
+	  SID			  "21"
+	  Position		  [235, 70, 255, 90]
+	  ZOrder		  2
+	}
+	Line {
+	  ZOrder		  2
+	  SrcBlock		  "Constant"
+	  SrcPort		  1
+	  DstBlock		  "Terminator"
+	  DstPort		  1
+	}
+      }
+    }
+    Block {
+      BlockType		      SubSystem
+      Name		      "Nonlinear MPC Example\n(Overhead Crane)"
+      SID		      "25"
+      Ports		      []
+      Position		      [80, 114, 200, 156]
+      ZOrder		      35
+      BackgroundColor	      "cyan"
+      ShowName		      off
+      OpenFcn		      "open_system('nonlinear_crane_example','force');"
+      RequestExecContextInheritance off
+      ContentPreviewEnabled   on
+      Object {
+	$PropName		"MaskObject"
+	$ObjectID		20
+	$ClassName		"Simulink.Mask"
+	Display			"disp('Nonlinear MPC Example\\n(Overhead Crane)')"
+      }
+      System {
+	Name			"Nonlinear MPC Example\n(Overhead Crane)"
+	Location		[745, 250, 1419, 762]
+	Open			off
+	ModelBrowserVisibility	off
+	ModelBrowserWidth	200
+	ScreenColor		"white"
+	PaperOrientation	"landscape"
+	PaperPositionMode	"auto"
+	PaperType		"usletter"
+	PaperUnits		"inches"
+	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
+	TiledPageScale		1
+	ShowPageBoundaries	off
+	ZoomFactor		"100"
+      }
+    }
     Block {
       BlockType		      SubSystem
       Name		      "OSQP Solver"
@@ -863,7 +953,7 @@ Library {
       ContentPreviewEnabled   on
       Object {
 	$PropName		"MaskObject"
-	$ObjectID		19
+	$ObjectID		21
 	$ClassName		"Simulink.Mask"
 	Type			"OSQP"
 	Description		"This block implements an OSQP solver object."
@@ -871,9 +961,9 @@ Library {
 	SelfModifiable		"on"
 	Array {
 	  Type			  "Simulink.MaskParameter"
-	  Dimension		  10
+	  Dimension		  12
 	  Object {
-	    $ObjectID		    20
+	    $ObjectID		    22
 	    Type		    "edit"
 	    Name		    "P"
 	    Prompt		    "P"
@@ -881,42 +971,42 @@ Library {
 	    Tunable		    "off"
 	  }
 	  Object {
-	    $ObjectID		    21
+	    $ObjectID		    23
 	    Type		    "edit"
 	    Name		    "A"
 	    Prompt		    "A"
 	    Value		    "A"
 	  }
 	  Object {
-	    $ObjectID		    22
+	    $ObjectID		    24
 	    Type		    "edit"
 	    Name		    "q"
 	    Prompt		    "q"
 	    Value		    "q"
 	  }
 	  Object {
-	    $ObjectID		    23
+	    $ObjectID		    25
 	    Type		    "edit"
 	    Name		    "l"
 	    Prompt		    "l"
 	    Value		    "l"
 	  }
 	  Object {
-	    $ObjectID		    24
+	    $ObjectID		    26
 	    Type		    "edit"
 	    Name		    "u"
 	    Prompt		    "u"
 	    Value		    "u"
 	  }
 	  Object {
-	    $ObjectID		    25
+	    $ObjectID		    27
 	    Type		    "edit"
 	    Name		    "opts"
 	    Prompt		    "OSQP Settings"
 	    Value		    "{'verbose',true}"
 	  }
 	  Object {
-	    $ObjectID		    26
+	    $ObjectID		    28
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
@@ -931,7 +1021,7 @@ Library {
 	    Value		    "Never"
 	  }
 	  Object {
-	    $ObjectID		    27
+	    $ObjectID		    29
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
@@ -946,30 +1036,48 @@ Library {
 	    Value		    "Always"
 	  }
 	  Object {
-	    $ObjectID		    28
+	    $ObjectID		    30
 	    Type		    "checkbox"
 	    Name		    "has_external_q_input"
 	    Prompt		    "External linear cost (q)"
 	    Value		    "on"
 	  }
 	  Object {
-	    $ObjectID		    29
+	    $ObjectID		    31
 	    Type		    "checkbox"
 	    Name		    "has_external_bound_input"
 	    Prompt		    "External bounds (l,u)"
 	    Value		    "on"
 	  }
+	  Object {
+	    $ObjectID		    32
+	    Type		    "checkbox"
+	    Name		    "use_custom_osqp_dir"
+	    Prompt		    "Export generated code to custom location"
+	    Value		    "off"
+	    Tunable		    "off"
+	    Callback		    "%p = Simulink.Mask.get( gcb );\n%chkbox = p.Parameters( 11 )\n%locBut = p.getDialogControl( 'locat"
+	    "ion_button' );\n%locBox = p.Parameters( 12 );\n\n%enab = chkbox.Value;\n%locBut.Visible = enab;\n%locBox.Visible "
+	    "= enab;\n"
+	  }
+	  Object {
+	    $ObjectID		    33
+	    Type		    "edit"
+	    Name		    "dirText"
+	    Prompt		    ""
+	    Value		    "''"
+	  }
 	  PropName		  "Parameters"
 	}
 	Array {
 	  Type			  "Simulink.dialog.Group"
-	  Dimension		  3
+	  Dimension		  4
 	  Object {
-	    $ObjectID		    30
+	    $ObjectID		    34
 	    Prompt		    "%<MaskType>"
 	    Object {
 	      $PropName		      "DialogControls"
-	      $ObjectID		      31
+	      $ObjectID		      35
 	      $ClassName	      "Simulink.dialog.Text"
 	      Prompt		      "%<MaskDescription>"
 	      Name		      "DescTextVar"
@@ -977,37 +1085,37 @@ Library {
 	    Name		    "DescGroupVar"
 	  }
 	  Object {
-	    $ObjectID		    32
+	    $ObjectID		    36
 	    Prompt		    "OSQP Solver Data"
 	    Array {
 	      Type		      "Simulink.dialog.parameter.Edit"
 	      Dimension		      6
 	      Object {
-		$ObjectID		33
+		$ObjectID		37
 		Name			"P"
 	      }
 	      Object {
-		$ObjectID		34
+		$ObjectID		38
 		Row			"current"
 		Name			"A"
 	      }
 	      Object {
-		$ObjectID		35
+		$ObjectID		39
 		Row			"current"
 		Name			"q"
 	      }
 	      Object {
-		$ObjectID		36
+		$ObjectID		40
 		Row			"current"
 		Name			"l"
 	      }
 	      Object {
-		$ObjectID		37
+		$ObjectID		41
 		Row			"current"
 		Name			"u"
 	      }
 	      Object {
-		$ObjectID		38
+		$ObjectID		42
 		Name			"opts"
 	      }
 	      PropName		      "DialogControls"
@@ -1015,35 +1123,72 @@ Library {
 	    Name		    "ParameterGroupVar"
 	  }
 	  Object {
-	    $ObjectID		    39
+	    $ObjectID		    43
 	    Array {
 	      Type		      "Simulink.dialog.parameter.Control"
 	      Dimension		      4
 	      Object {
-		$ObjectID		40
+		$ObjectID		44
 		$ClassName		"Simulink.dialog.parameter.Popup"
 		PromptLocation		"top"
 		Name			"refactor_style"
 	      }
 	      Object {
-		$ObjectID		41
+		$ObjectID		45
 		$ClassName		"Simulink.dialog.parameter.Popup"
 		PromptLocation		"top"
 		Name			"warmstart_style"
 	      }
 	      Object {
-		$ObjectID		42
+		$ObjectID		46
 		$ClassName		"Simulink.dialog.parameter.CheckBox"
 		Name			"has_external_q_input"
 	      }
 	      Object {
-		$ObjectID		43
+		$ObjectID		47
 		$ClassName		"Simulink.dialog.parameter.CheckBox"
 		Name			"has_external_bound_input"
 	      }
 	      PropName		      "DialogControls"
 	    }
 	    Name		    "Container4"
+	  }
+	  Object {
+	    $ObjectID		    48
+	    Prompt		    "Code Generation Settings (Advanced)"
+	    Object {
+	      $PropName		      "DialogControls"
+	      $ObjectID		      49
+	      $ClassName	      "Simulink.dialog.Group"
+	      Array {
+		Type			"Simulink.dialog.Control"
+		Dimension		3
+		Object {
+		  $ObjectID		  50
+		  $ClassName		  "Simulink.dialog.parameter.CheckBox"
+		  Name			  "use_custom_osqp_dir"
+		  Tooltip		  "Export the code to a custom directory instead of the default"
+		}
+		Object {
+		  $ObjectID		  51
+		  $ClassName		  "Simulink.dialog.Button"
+		  Prompt		  "Change Location"
+		  Callback		  "p = Simulink.Mask.get( gcb );\ndirTxt = p.Parameters( 12 );\n\nselpath = uigetdir( pwd, 'Select direc"
+		  "tory to export OSQP code to' );\ndirTxt.Value = ['''', selpath, ''''];\n"
+		  Name			  "location_button"
+		}
+		Object {
+		  $ObjectID		  52
+		  $ClassName		  "Simulink.dialog.parameter.Edit"
+		  PromptLocation	  "left"
+		  Row			  "current"
+		  Name			  "dirText"
+		}
+		PropName		"DialogControls"
+	      }
+	      Name		      "Container6"
+	    }
+	    Name		    "codegen"
 	  }
 	  PropName		  "DialogControls"
 	}
@@ -1063,7 +1208,7 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
-	SIDHighWatermark	"15"
+	SIDHighWatermark	"19"
 	Block {
 	  BlockType		  Inport
 	  Name			  "q_ext"
@@ -1079,9 +1224,9 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "l_ext"
-	  SID			  "1:3"
+	  SID			  "1:18"
 	  Position		  [160, 323, 190, 337]
-	  ZOrder		  1128
+	  ZOrder		  1132
 	  Port			  "2"
 	  IconDisplay		  "Port number"
 	  Port {
@@ -1092,9 +1237,9 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "u_ext"
-	  SID			  "1:4"
+	  SID			  "1:19"
 	  Position		  [110, 348, 140, 362]
-	  ZOrder		  1129
+	  ZOrder		  1133
 	  Port			  "3"
 	  IconDisplay		  "Port number"
 	  Port {
@@ -1538,61 +1683,6 @@ Library {
 	  SrcBlock		  "Bus\nCreator1"
 	  SrcPort		  1
 	  DstBlock		  "info"
-	  DstPort		  1
-	}
-      }
-    }
-    Block {
-      BlockType		      SubSystem
-      Name		      "Subsystem"
-      SID		      "17"
-      Ports		      []
-      Position		      [90, 14, 190, 56]
-      ZOrder		      31
-      BackgroundColor	      "cyan"
-      ShowName		      off
-      OpenFcn		      "open_system('quadcopter_example','force');"
-      RequestExecContextInheritance off
-      Object {
-	$PropName		"MaskObject"
-	$ObjectID		44
-	$ClassName		"Simulink.Mask"
-	Display			"disp('MPC Example\\n(Quadcopter)')"
-      }
-      System {
-	Name			"Subsystem"
-	Location		[1978, 132, 2652, 644]
-	Open			off
-	ModelBrowserVisibility	off
-	ModelBrowserWidth	200
-	ScreenColor		"white"
-	PaperOrientation	"landscape"
-	PaperPositionMode	"auto"
-	PaperType		"usletter"
-	PaperUnits		"inches"
-	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
-	TiledPageScale		1
-	ShowPageBoundaries	off
-	ZoomFactor		"100"
-	Block {
-	  BlockType		  Constant
-	  Name			  "Constant"
-	  SID			  "20"
-	  Position		  [185, 65, 215, 95]
-	  ZOrder		  1
-	}
-	Block {
-	  BlockType		  Terminator
-	  Name			  "Terminator"
-	  SID			  "21"
-	  Position		  [235, 70, 255, 90]
-	  ZOrder		  2
-	}
-	Line {
-	  ZOrder		  2
-	  SrcBlock		  "Constant"
-	  SrcPort		  1
-	  DstBlock		  "Terminator"
 	  DstPort		  1
 	}
       }

@@ -34,6 +34,7 @@ else
         isempty(strfind(what, 'osqp'))      && ...
         isempty(strfind(what, 'osqp_mex'))  && ...
         isempty(strfind(what, 'clean'))     && ...
+        isempty(strfind(what, 'simulink'))  && ...
         isempty(strfind(what, 'purge')))
             fprintf('No rule to make target "%s", exiting.\n', what);
     end
@@ -121,6 +122,7 @@ osqp_dir = fullfile(makefile_path, 'osqp_sources');
 osqp_build_dir = fullfile(osqp_dir, 'build');
 qdldl_dir = fullfile(osqp_dir, 'lin_sys', 'direct', 'qdldl');
 cg_sources_dir = fullfile('.', 'codegen', 'sources');
+simulink_dir = fullfile( makefile_path, 'simulink' );
 
 % Include directory
 inc_dir = [
@@ -254,7 +256,29 @@ if( any(strcmpi(what,'codegen')) || any(strcmpi(what,'all')) )
 
 
     fprintf('\t\t\t\t\t[done]\n');
+end
 
+
+%% OSQP Simulink library
+if( any(strcmpi(what,'simulink')) || any(strcmpi(what,'all')) )
+   fprintf('Creating OSQP simulink library...\n\t');
+
+   base_lib = 'osqp_library_base';
+   final_lib = 'osqp_library';
+   base_lib_path = fullfile( simulink_dir, 'block', [base_lib, '.mdl'] );
+   final_lib_path = fullfile( simulink_dir, 'block', [final_lib, '.slx'] );
+   
+   % Load toe MDL version of the library and save it in SLX format
+   load_system( base_lib_path )
+
+   % Set the library repository flag of the library
+   set_param( base_lib, 'Lock', 'off');
+   set_param( base_lib, 'EnableLBRepository', 'on' );
+   set_param( base_lib, 'Lock', 'on');
+   
+   % Export the library to the SLX format
+   save_system( base_lib, final_lib_path, 'ExportToVersion', 'R2015B_SLX');
+   close_system( base_lib );
 end
 
 
