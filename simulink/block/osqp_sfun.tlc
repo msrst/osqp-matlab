@@ -149,9 +149,9 @@
   %endif
   %if %<ParamSettings.updateAP>[0] != 0
     static c_float A_up[%<numnnzA>];
-    static c_float A_up_idx[%<numnnzA>];
+    static c_int   A_up_idx[%<numnnzA>];
     static c_float P_up[%<numnnzP>];
-    static c_float P_up_idx[%<numnnzP>];
+    static c_int   P_up_idx[%<numnnzP>];
   %endif
 
   %%-------------------------------------------------
@@ -163,10 +163,12 @@
     %endroll
 
     // Call the update routine
-    c_int err = osqp_update_lin_cost( &%<workspace>, q_up );
-    if ( err != 0 ) {
-      %assign errStr = "\"Error updating the q vector\""
-      %<LibSetRTModelErrorStatus(errStr)>;
+    {
+      c_int err = osqp_update_lin_cost( &%<workspace>, q_up );
+      if ( err != 0 ) {
+        %assign errStr = "\"Error updating the q vector\""
+        %<LibSetRTModelErrorStatus(errStr)>;
+      }
     }
   %endif
 
@@ -178,10 +180,34 @@
     %endroll
 
     // Call the update routine
-    c_int err = osqp_update_bounds( &%<workspace>, l_up, u_up );
-    if ( err != 0 ) {
-      %assign errStr = "\"Error updating the u and l vectors\""
-      %<LibSetRTModelErrorStatus(errStr)>;
+    {
+      c_int err = osqp_update_bounds( &%<workspace>, l_up, u_up );
+      if ( err != 0 ) {
+        %assign errStr = "\"Error updating the u and l vectors\""
+        %<LibSetRTModelErrorStatus(errStr)>;
+      }
+    }
+  %endif
+
+  %if %<ParamSettings.updateAP>[0] == 1
+    // Iterate through the A and P matrices find NaN and Inf values
+    %roll idx=DataInputPort[6].RollRegions, lcv=RollThreshold, block, "Roller", "U"
+      A_up[%<lcv>]     = nonfinite_toOSQP( (c_float) %<LibBlockInputSignal(5, "", lcv, idx)> );
+      A_up_idx[%<lcv>] = (c_int) %<LibBlockInputSignal(4, "", lcv, idx)> - 1;
+    %endroll
+
+    %roll idx=DataInputPort[3].RollRegions, lcv=RollThreshold, block, "Roller", "U"
+      P_up[%<lcv>]     = nonfinite_toOSQP( (c_float) %<LibBlockInputSignal(3, "", lcv, idx)> );
+      P_up_idx[%<lcv>] = (c_int) %<LibBlockInputSignal(2, "", lcv, idx)> - 1;
+    %endroll
+
+    // Call the update routine
+    {
+      c_int err = osqp_update_P_A( &%<workspace>, P_up, P_up_idx, %<numnnzP>, A_up, A_up_idx, %<numnnzA> );
+      if ( err != 0 ) {
+        %assign errStr = "\"Error updating the A and P matrices\""
+        %<LibSetRTModelErrorStatus(errStr)>;
+      }
     }
   %endif
 
