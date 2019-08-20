@@ -96,6 +96,10 @@ out/
 *.slxc
 simulink/examples/slprj/
 simulink/examples/*_rtw
+*slprj/
+*.slx
+*.autosave
+*.original
 
 # Files generated during tests
 code/
