@@ -540,14 +540,21 @@ classdef osqp < handle
                 cd(orig_dir);
             end
 
-            % Make mex interface to the generated code
-            mex_cfile  = fullfile(files_to_generate_path, 'emosqp_mex.c');
-            make_emosqp(target_dir, mex_cfile, embedded, float_flag, long_flag);
+            % Configure the code through cmake
+            fprintf('Configuring build...\t\t\t\t\t\t\t\t')
+            configure_build(target_dir, embedded, float_flag, long_flag);
+            fprintf('[done]\n');
 
-            % Rename the mex file
-            old_mexfile = ['emosqp_mex.', mexext];
-            new_mexfile = [p.Results.mexname, '.', mexext];
-            movefile(old_mexfile, new_mexfile);
+            % Make mex interface to the generated code
+            if ~isempty( p.Results.mexname )
+                mex_cfile  = fullfile(files_to_generate_path, 'emosqp_mex.c');
+                make_emosqp(target_dir, mex_cfile);
+
+                % Rename the mex file
+                old_mexfile = ['emosqp_mex.', mexext];
+                new_mexfile = [p.Results.mexname, '.', mexext];
+                movefile(old_mexfile, new_mexfile);
+            end
 
         end
 
