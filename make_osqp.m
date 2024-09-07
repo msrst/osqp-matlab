@@ -14,7 +14,7 @@ function make_osqp(varargin)
 %    'osqp_mex': builds the OSQP mex interface and links it to the OSQP
 %    library
 %
-%    VARARGIN{1:NARGIN-1} specifies the optional flags passed to the compiler
+%    VARARGIN{1:NARGIN-1} specifies the optional flags passed to cmake
 %
 %    Additional commands:
 %
@@ -75,6 +75,10 @@ end
 Matlab_ROOT = strrep(matlabroot, '\', '/');
 cmake_args = sprintf('%s %s%s%s', cmake_args, ...
     '-DMatlab_ROOT_DIR="', Matlab_ROOT, '"');
+
+for i = 1:nargin-1
+    cmake_args = [cmake_args ' ' varargin{i}];
+end
 
 % Add parameters options to mex and cmake
 % CTRLC
@@ -149,6 +153,7 @@ if( any(strcmpi(what,'osqp')) || any(strcmpi(what,'all')) )
     end
 
     % Compile static library with CMake
+    fprintf([cmake_args '\n'])
     [status, output] = system(sprintf('%s %s ..', 'cmake', cmake_args));
     if(status)
         fprintf('\n');

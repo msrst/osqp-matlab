@@ -414,6 +414,11 @@ function WriteRTW(block)
       errTxt = [errTxt, ' Please copy the file simulink/block/osqp_makeRTWHook.m'];
       errTxt = [errTxt, ' to your working directory and rename it to ' hookName];
       error(errTxt);
+  elseif ( contains(hookExist, 'toolbox\coder\embeddedcoder') || contains(hookExist, 'tookbox/coder/embeddedcoder') )
+      errTxt = ['The script ', hookName, ' is pointing to ', hookExist, ', which is the default and lacks build instructions for OSQP.'];
+      errTxt = [errTxt, ' Please copy the file simulink/block/osqp_makeRTWHook.m'];
+      errTxt = [errTxt, ' to your working directory and rename it to ' hookName];
+      error(errTxt);
   end
 
 
